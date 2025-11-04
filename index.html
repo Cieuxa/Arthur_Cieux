@@ -181,10 +181,8 @@
             right: 0;
             bottom: 0;
             background: 
-                linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.03) 50%),
-                linear-gradient(transparent 50%, rgba(255,255,255,0.03) 50%);
-            background-size: 20px 20px;
-            pointer-events: none;
+                repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px),
+                repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0px, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 2px);
             opacity: 0.3;
         }
 
@@ -609,6 +607,13 @@
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 2px;
+            min-width: 120px;
+            text-align: center;
+            border: 1px solid var(--accent-yellow);
+            background: rgba(255, 204, 0, 0.1);
         }
 
         .retro-link::before {
@@ -629,9 +634,10 @@
         .retro-link:hover {
             color: var(--primary-bg);
             background-color: var(--accent-yellow);
-            padding: 2px 4px;
+            padding: 6px 12px;
             margin-right: 8px;
             box-shadow: 0 0 10px var(--accent-yellow);
+            transform: translateY(-2px);
         }
 
         .audio-player audio {
@@ -956,6 +962,12 @@
         .icon-parametres {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" fill="%23ff0000"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23ff0000"/></svg>');
         }
+
+        /* Animation blink pour les indicateurs */
+        @keyframes blink {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -1078,8 +1090,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div style="margin-top: 10px;">
-                                        <a href="javascript:void(0)" class="retro-link" id="launch-sous-le-flux-btn">Lancer le projet complet</a>
+                                    <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;">
+                                        <a href="javascript:void(0)" class="retro-link launch-project-btn">Lancer le projet complet</a>
                                         <a href="javascript:void(0)" class="retro-link">Voir le code source</a>
                                         <a href="javascript:void(0)" class="retro-link">Documentation technique</a>
                                     </div>
@@ -1087,58 +1099,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <style>
-                    <style>
-                        @keyframes blink {
-                            0%, 100% { opacity: 0.2; }
-                            50% { opacity: 1; }
-                        }
-                        
-                        .floor-projector {
-                            transition: all 0.3s;
-                        }
-                        
-                        .floor-projector:hover {
-                            box-shadow: 0 0 20px var(--accent-blue);
-                            transform: scale(1.02);
-                        }
-                        
-                        .project-preview {
-                            position: relative;
-                            overflow: hidden;
-                        }
-                        
-                        .project-preview::before {
-                            content: '';
-                            position: absolute;
-                            top: -50%;
-                            left: -50%;
-                            width: 200%;
-                            height: 200%;
-                            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
-                            transform: rotate(45deg);
-                            animation: shine 3s infinite;
-                        }
-
-                        /* AMÉLIORATION DES BOUTONS */
-                        .retro-link {
-                            display: inline-block !important;
-                            padding: 6px 12px !important;
-                            margin: 2px !important;
-                            min-width: 120px;
-                            text-align: center;
-                            border: 1px solid var(--accent-yellow) !important;
-                            background: rgba(255, 204, 0, 0.1) !important;
-                        }
-
-                        .retro-link:hover {
-                            background: var(--accent-yellow) !important;
-                            color: var(--primary-bg) !important;
-                            transform: translateY(-2px) !important;
-                            box-shadow: 0 4px 8px rgba(255, 204, 0, 0.3) !important;
-                        }
-                    </style>
                 `
             },
             {
@@ -1314,6 +1274,11 @@
             
             // Configurer les événements
             setupWindowEvents(windowElement, app);
+            
+            // Configurer les liens du projet "Sous le Flux"
+            if (app.id === 'projets') {
+                setTimeout(setupSousLeFluxLinks, 100);
+            }
             
             playSound('sfx-confirm');
         }
@@ -1506,34 +1471,59 @@
 
         // 15. Gestion des paramètres
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('crt-effect').addEventListener('change', function(e) {
-                const crtElements = document.querySelectorAll('.crt-overlay, .crt-effect, .scanlines');
-                crtElements.forEach(el => {
-                    el.style.display = e.target.checked ? 'block' : 'none';
-                });
-            });
-            
-            document.getElementById('particles').addEventListener('change', function(e) {
-                particlesContainer.style.display = e.target.checked ? 'block' : 'none';
-            });
-            
-            document.getElementById('music-volume').addEventListener('input', function(e) {
-                document.getElementById('bg-music').volume = e.target.value / 100;
-            });
-            
-            document.getElementById('play-btn').addEventListener('click', function() {
-                document.getElementById('bg-music').play();
-            });
-            
-            document.getElementById('pause-btn').addEventListener('click', function() {
-                document.getElementById('bg-music').pause();
-            });
-            
-            document.getElementById('reset-btn').addEventListener('click', function() {
-                if (confirm('Redémarrer le système?')) {
-                    location.reload();
+            // Ces éléments seront disponibles après le chargement
+            setTimeout(() => {
+                const crtEffect = document.getElementById('crt-effect');
+                const particles = document.getElementById('particles');
+                const musicVolume = document.getElementById('music-volume');
+                const playBtn = document.getElementById('play-btn');
+                const pauseBtn = document.getElementById('pause-btn');
+                const resetBtn = document.getElementById('reset-btn');
+                
+                if (crtEffect) {
+                    crtEffect.addEventListener('change', function(e) {
+                        const crtElements = document.querySelectorAll('.crt-overlay, .crt-effect, .scanlines');
+                        crtElements.forEach(el => {
+                            el.style.display = e.target.checked ? 'block' : 'none';
+                        });
+                    });
                 }
-            });
+                
+                if (particles) {
+                    particles.addEventListener('change', function(e) {
+                        particlesContainer.style.display = e.target.checked ? 'block' : 'none';
+                    });
+                }
+                
+                if (musicVolume) {
+                    musicVolume.addEventListener('input', function(e) {
+                        const bgMusic = document.getElementById('bg-music');
+                        if (bgMusic) bgMusic.volume = e.target.value / 100;
+                    });
+                }
+                
+                if (playBtn) {
+                    playBtn.addEventListener('click', function() {
+                        const bgMusic = document.getElementById('bg-music');
+                        if (bgMusic) bgMusic.play();
+                    });
+                }
+                
+                if (pauseBtn) {
+                    pauseBtn.addEventListener('click', function() {
+                        const bgMusic = document.getElementById('bg-music');
+                        if (bgMusic) bgMusic.pause();
+                    });
+                }
+                
+                if (resetBtn) {
+                    resetBtn.addEventListener('click', function() {
+                        if (confirm('Redémarrer le système?')) {
+                            location.reload();
+                        }
+                    });
+                }
+            }, 1000);
         });
 
         // 16. Redimensionnement responsive
@@ -1591,6 +1581,10 @@
                     if (renderer) {
                         renderer.dispose();
                     }
+                    if (window.sousLeFluxResizeObserver) {
+                        window.sousLeFluxResizeObserver.disconnect();
+                    }
+                    window.sousLeFluxActive = false;
                 }
                 projectWindow.classList.add('window-closing');
                 setTimeout(() => {
@@ -1618,6 +1612,8 @@
         function initSousLeFlux() {
             const container = document.getElementById('sous-le-flux-container');
             const canvas = document.getElementById('sous-le-flux-canvas');
+            
+            if (!container || !canvas) return;
             
             const scene = new THREE.Scene();
             scene.background = new THREE.Color(0x000000);
@@ -1834,37 +1830,32 @@
             window.sousLeFluxResizeObserver = resizeObserver;
         }
 
-        // Gestion des événements pour les liens du projet
+        // Fonction pour configurer les liens du projet Sous le Flux
         function setupSousLeFluxLinks() {
-            // Utiliser event delegation pour gérer les clics
-            document.addEventListener('click', function(e) {
-                // Bouton "Lancer le projet complet"
-                if (e.target.classList.contains('launch-project-btn')) {
-                    launchSousLeFlux();
-                    e.preventDefault();
-                }
-                
-                // Prévisualisation
-                if (e.target.closest('.floor-projector')) {
-                    launchSousLeFlux();
-                    e.preventDefault();
-                }
-            });
-        }
-
-        // Configurer les liens quand une fenêtre projets s'ouvre
-        const originalOpenWindow = openWindow;
-        openWindow = function(app) {
-            originalOpenWindow(app);
+            const launchBtns = document.querySelectorAll('.launch-project-btn');
+            const previewDiv = document.getElementById('floor-projector');
             
-            if (app.id === 'projets') {
-                setTimeout(setupSousLeFluxLinks, 100);
+            launchBtns.forEach(btn => {
+                btn.addEventListener('click', launchSousLeFlux);
+            });
+            
+            if (previewDiv) {
+                previewDiv.addEventListener('click', launchSousLeFlux);
             }
-        };
+        }
 
         // Configuration initiale
         document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(setupSousLeFluxLinks, 1000);
+            // Configuration de la barre des tâches
+            const taskParametres = document.getElementById('task-parametres');
+            if (taskParametres) {
+                taskParametres.addEventListener('click', function() {
+                    const settingsApp = applications.find(app => app.id === 'parametres');
+                    if (settingsApp) {
+                        openWindow(settingsApp);
+                    }
+                });
+            }
         });
     </script>
 </body>
