@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelOS - Portfolio Interactif Rétro</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Variables CSS --- */
+        :root {
+            --primary-bg: #0a0a1a;
+            --primary-text: #e0e0e0;
+            --accent-yellow: #ffcc00;
+            --accent-blue: #00aaff;
+            --accent-purple: #800080;
+            --accent-red: #ff0000;
+            --neon-glow: 0 0 10px currentColor, 0 0 20px currentColor;
+        }
+
+        /* --- 1. Ambiance Globale --- */
+        body {
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            font-family: 'Press Start 2P', cursive;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            image-rendering: pixelated;
+            position: relative;
+            font-size: 12px;
+            line-height: 1.4;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect x="0" y="0" width="16" height="16" fill="%23ffcc00"/><rect x="4" y="4" width="8" height="8" fill="%230a0a1a"/></svg>'), auto;
+        }
+
+        /* --- 2. Écran "Press Start" --- */
+        #start-screen {
+            text-align: center;
+            cursor: pointer;
+            z-index: 5000;
+            padding: 30px;
+            background: rgba(10, 10, 26, 0.95);
+            border: 4px solid var(--primary-text);
+            box-shadow: 0 0 0 4px var(--primary-bg), 0 0 30px rgba(128, 0, 128, 0.7);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #start-screen::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 204, 0, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        #start-screen:hover {
+            transform: scale(1.08) rotate(1deg);
+            box-shadow: 0 0 0 4px var(--primary-bg), 0 0 50px rgba(128, 0, 128, 0.9);
+            border-color: var(--accent-yellow);
+        }
+
+        #start-screen h1 {
+            font-size: 1.8rem;
+            color: #d0d0ff;
+            text-shadow: 3px 3px 0px var(--accent-purple), 6px 6px 0px rgba(128, 0, 128, 0.3);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        #start-screen h1:nth-child(2) {
+            color: var(--accent-yellow);
+            text-shadow: 2px 2px 0px var(--accent-purple);
+            margin-bottom: 25px;
+        }
+
+        .terminal-line {
+            font-size: 0.7rem;
+            color: var(--accent-blue);
+            margin: 5px 0;
+            opacity: 0;
+            animation: typeIn 0.5s forwards;
+        }
+
+        .terminal-line:nth-child(1) { animation-delay: 0.5s; }
+        .terminal-line:nth-child(2) { animation-delay: 1s; }
+        .terminal-line:nth-child(3) { animation-delay: 1.5s; }
+
+        .blink {
+            animation: blink-animation 1s steps(5, start) infinite;
+        }
+
+        @keyframes blink-animation {
+            to { visibility: hidden; }
+        }
+
+        @keyframes typeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(45deg) translateX(-100%); }
+            100% { transform: rotate(45deg) translateX(100%); }
+        }
+
+        /* --- 3. Animation et Utilitaire --- */
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- 4. Fond étoilé (Amélioré) --- */
+        .star {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite alternate;
+        }
+
+        .star.small {
+            width: 1px;
+            height: 1px;
+            animation-duration: 2s;
+        }
+
+        .star.medium {
+            width: 2px;
+            height: 2px;
+            animation-duration: 4s;
+        }
+
+        .star.large {
+            width: 3px;
+            height: 3px;
+            animation-duration: 6s;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* --- 5. Fenêtres de contenu --- */
+        .content-window {
+            position: fixed;
+            background: rgba(20, 20, 40, 0.98);
+            border: 4px solid var(--primary-text);
+            box-shadow: 0 0 0 4px var(--primary-bg), 0 0 30px rgba(128, 0, 128, 0.7);
+            padding: 0;
+            width: 600px;
+            height: 400px;
+            max-height: 80vh;
+            overflow: hidden;
+            z-index: 1000;
+            resize: both;
+            min-width: 400px;
+            min-height: 300px;
+            backdrop-filter: blur(5px);
+        }
+
+        .content-window::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.03) 50%),
+                linear-gradient(transparent 50%, rgba(255,255,255,0.03) 50%);
+            background-size: 20px 20px;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .content-window.fullscreen {
+            width: 100% !important;
+            height: calc(100vh - 44px) !important;
+            top: 0 !important;
+            left: 0 !important;
+            max-width: none;
+            max-height: none;
+            resize: none;
+            z-index: 9999;
+        }
+
+        .window-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0;
+            padding: 15px;
+            border-bottom: 2px solid var(--primary-text);
+            cursor: move;
+            user-select: none;
+            padding-right: 100px;
+            background: rgba(10, 10, 26, 0.7);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .window-title {
+            color: var(--accent-yellow);
+            font-size: 0.9rem;
+            margin: 0;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.8);
+        }
+
+        .window-controls {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .window-btn {
+            background: none;
+            border: 2px solid var(--primary-text);
+            color: var(--primary-text);
+            font-family: 'Press Start 2P', cursive;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.6rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .window-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .window-btn:hover::before {
+            left: 100%;
+        }
+
+        .close-btn:hover {
+            background-color: var(--accent-red);
+            color: #ffffff;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--accent-red);
+        }
+
+        .resize-btn:hover {
+            background-color: var(--accent-yellow);
+            color: var(--primary-bg);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--accent-yellow);
+        }
+
+        .fullscreen-btn:hover {
+            background-color: var(--accent-blue);
+            color: #ffffff;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--accent-blue);
+        }
+
+        /* Zone de contenu avec défilement */
+        .window-content {
+            height: calc(100% - 60px);
+            overflow-y: auto;
+            padding: 15px;
+            padding-right: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Style de la barre de défilement améliorée */
+        .window-content::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        .window-content::-webkit-scrollbar-track {
+            background: rgba(10, 10, 26, 0.5);
+            border: 2px solid var(--primary-text);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .window-content::-webkit-scrollbar-thumb {
+            background: var(--accent-yellow);
+            border: 2px solid var(--primary-text);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .window-content::-webkit-scrollbar-thumb:hover {
+            background: #ffd700;
+            box-shadow: 0 0 10px var(--accent-yellow);
+        }
+
+        /* Indicateur de redimensionnement */
+        .content-window::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, transparent 50%, var(--accent-yellow) 50%);
+            cursor: se-resize;
+            z-index: 1001;
+        }
+
+        /* Animations de Fenêtre améliorées */
+        @keyframes window-open {
+            0% { opacity: 0; transform: scale(0.7) rotate(-5deg); }
+            70% { opacity: 1; transform: scale(1.05) rotate(2deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+
+        @keyframes window-close {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.8); }
+        }
+
+        .window-opening {
+            animation: window-open 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .window-closing {
+            animation: window-close 0.3s ease-out forwards;
+        }
+
+        /* --- 6. Styles du Bureau --- */
+        #desktop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: calc(100vh - 44px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .desktop-icons-circle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            padding: 8px;
+            cursor: pointer;
+            text-align: center;
+            border: 2px solid transparent;
+            position: absolute;
+            transition: all 0.3s;
+        }
+
+        .desktop-icon .icon {
+            width: 48px;
+            height: 48px;
+            image-rendering: pixelated; 
+            margin-bottom: 8px;
+            transition: all 0.3s;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .desktop-icon span {
+            font-size: 0.7rem;
+            color: var(--primary-text);
+            text-shadow: 1px 1px 0 var(--primary-bg);
+            padding: 2px 4px;
+            background-color: rgba(10, 10, 26, 0.5);
+            transition: all 0.3s;
+        }
+
+        .desktop-icon:hover {
+            background-color: rgba(224, 224, 224, 0.2);
+            border: 2px dashed var(--accent-yellow);
+            transform: scale(1.1);
+        }
+
+        .desktop-icon:hover .icon {
+            filter: brightness(1.2);
+        }
+
+        .desktop-icon:hover span {
+            background-color: rgba(255, 204, 0, 0.8);
+            color: var(--primary-bg);
+        }
+
+        /* --- 7. Styles de la Barre des Tâches --- */
+        #taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 44px;
+            background: rgba(20, 20, 40, 0.95);
+            border-top: 4px solid var(--primary-text);
+            box-shadow: 0 0 0 4px var(--primary-bg);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            box-sizing: border-box;
+            backdrop-filter: blur(5px);
+        }
+
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            height: 100%;
+            flex: 0 0 auto;
+        }
+
+        .taskbar-center {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            height: 100%;
+            flex: 1;
+            justify-content: center;
+            overflow-x: auto;
+            padding: 0 10px;
+        }
+
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            height: 100%;
+            flex: 0 0 auto;
+            justify-content: flex-end;
+        }
+
+        .taskbar-item {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-text);
+            color: var(--primary-bg);
+            border: 2px solid var(--primary-bg);
+            box-shadow: 2px 2px 0 var(--primary-bg);
+            cursor: pointer;
+            height: 32px;
+            white-space: nowrap;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .taskbar-item:hover {
+            background-color: var(--accent-yellow);
+            transform: translateY(-2px);
+            box-shadow: 2px 4px 0 var(--primary-bg);
+        }
+
+        .taskbar-item.active {
+            background-color: var(--accent-yellow);
+            box-shadow: inset 2px 2px 0 var(--primary-bg);
+            transform: translateY(1px);
+        }
+
+        /* Horloge améliorée */
+        .taskbar-clock {
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            font-size: 0.7rem;
+            color: var(--primary-text);
+            background-color: rgba(10, 10, 26, 0.5);
+            height: 32px;
+            min-width: 100px;
+            justify-content: center;
+            border: 2px solid var(--primary-text);
+            flex-shrink: 0;
+        }
+
+        /* --- 8. Styles de Contenu --- */
+        .inventory-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .inventory-item {
+            display: flex;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border: 2px solid var(--primary-text);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inventory-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .inventory-item:hover::before {
+            left: 100%;
+        }
+
+        .inventory-item:hover {
+            background: rgba(128, 0, 128, 0.25);
+            transform: translateX(8px) scale(1.02);
+            border-color: var(--accent-yellow);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .inventory-item img {
+            width: 48px;
+            height: 48px;
+            image-rendering: pixelated;
+            border: 2px solid var(--primary-text);
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .inventory-item:hover img {
+            border-color: var(--accent-yellow);
+            transform: scale(1.1);
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-info h4 {
+            color: var(--accent-yellow);
+            margin: 0 0 4px 0;
+            font-size: 0.8rem;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
+        }
+
+        .item-type {
+            font-size: 0.6rem;
+            color: #aaa;
+            margin: 0 0 8px 0;
+        }
+
+        .item-desc {
+            font-size: 0.6rem;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+
+        .item-stats {
+            font-size: 0.6rem;
+            border-top: 1px dotted var(--primary-text);
+            padding-top: 8px;
+            line-height: 1.5;
+        }
+
+        /* Liens Rétro améliorés */
+        .retro-link {
+            color: var(--accent-yellow);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--accent-yellow);
+            margin-right: 12px;
+            font-size: 0.6rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .retro-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .retro-link:hover::before {
+            left: 100%;
+        }
+
+        .retro-link:hover {
+            color: var(--primary-bg);
+            background-color: var(--accent-yellow);
+            padding: 2px 4px;
+            margin-right: 8px;
+            box-shadow: 0 0 10px var(--accent-yellow);
+        }
+
+        .audio-player audio {
+            filter: sepia(1) hue-rotate(160deg) saturate(3);
+            width: 100%;
+        }
+
+        /* --- 9. Effets de curseur personnalisé --- */
+        .desktop-icon:hover, .window-btn:hover, .taskbar-item:hover {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect x="0" y="0" width="16" height="16" fill="%23ffcc00"/><rect x="4" y="4" width="8" height="8" fill="%230a0a1a"/></svg>'), auto;
+        }
+
+        /* --- 10. Effet CRT --- */
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            background: 
+                repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px),
+                repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0px, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 2px);
+            opacity: 0.4;
+        }
+
+        .crt-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            background: radial-gradient(ellipse at center, rgba(10, 10, 26, 0) 0%, rgba(10, 10, 26, 0.8) 100%);
+            opacity: 0.6;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 10000;
+            animation: scanline 10s linear infinite;
+        }
+
+        .crt-flicker {
+            animation: flicker 5s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.9; }
+            2% { opacity: 0.8; }
+            4% { opacity: 0.9; }
+            8% { opacity: 0.7; }
+            70% { opacity: 0.9; }
+            100% { opacity: 0.9; }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* --- 11. Fenêtre de paramètres --- */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .setting-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .setting-item label {
+            font-size: 0.6rem;
+            color: var(--accent-yellow);
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #333;
+            transition: .4s;
+            border: 2px solid var(--primary-text);
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 2px;
+            background-color: var(--primary-text);
+            transition: .4s;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--accent-yellow);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .volume-control {
+            width: 100%;
+        }
+
+        .button {
+            background-color: var(--primary-text);
+            color: var(--primary-bg);
+            border: 2px solid var(--primary-bg);
+            padding: 8px 16px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6rem;
+            cursor: pointer;
+            box-shadow: 2px 2px 0 var(--primary-bg);
+            transition: all 0.3s;
+        }
+
+        .button:hover {
+            background-color: var(--accent-yellow);
+            transform: translateY(-2px);
+            box-shadow: 2px 4px 0 var(--primary-bg);
+        }
+
+        .button:active {
+            transform: translateY(1px);
+            box-shadow: 1px 1px 0 var(--primary-bg);
+        }
+
+        /* --- 12. Styles pour le contenu About --- */
+        .about-content {
+            font-size: 0.7rem;
+            line-height: 1.5;
+        }
+
+        .about-content p {
+            margin-bottom: 10px;
+        }
+
+        /* --- 13. Effets de particules (AUGMENTÉ) --- */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 15s infinite linear;
+        }
+
+        .particle.small {
+            width: 1px;
+            height: 1px;
+            animation-duration: 8s;
+        }
+
+        .particle.medium {
+            width: 2px;
+            height: 2px;
+            animation-duration: 12s;
+        }
+
+        .particle.large {
+            width: 3px;
+            height: 3px;
+            animation-duration: 20s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* --- 14. Contrôles audio --- */
+        .control-panel {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .audio-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .audio-btn {
+            background: none;
+            border: 2px solid var(--primary-text);
+            color: var(--primary-text);
+            font-family: 'Press Start 2P', cursive;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.6rem;
+            transition: all 0.3s;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        #play-btn:hover {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        #pause-btn:hover {
+            background-color: var(--accent-purple);
+            color: white;
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 8px;
+            background: rgba(10, 10, 26, 0.7);
+            border: 2px solid var(--primary-text);
+            margin: 0 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Icônes personnalisées */
+        .icon-installations {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" fill="%23ffcc00"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23ffcc00"/></svg>');
+        }
+
+        .icon-projets {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" fill="%2300aaff"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%2300aaff"/></svg>');
+        }
+
+        .icon-about {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" fill="%23800080"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23800080"/></svg>');
+        }
+
+        .icon-parametres {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" fill="%23ff0000"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23ff0000"/></svg>');
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <h1>PORTFOLIO</h1>
+        <h1>ARTHUR CIEUX</h1>
+        <div class="terminal-line">> SYSTEM BOOT: PIXEL_OS v2.1.5</div>
+        <div class="terminal-line">> LOADING PORTFOLIO_DATA...</div>
+        <div class="terminal-line">> INITIALIZING CRT DISPLAY...</div>
+        <p class="blink">[ CLIQUEZ POUR DÉMARRER ]</p>
+    </div>
+
+    <div id="desktop" class="hidden">
+        <div class="desktop-icons-circle" id="desktop-icons">
+            <!-- Les icônes seront positionnées par JS en cercle -->
+        </div>
+    </div>
+
+    <!-- BARRE DES TÂCHES -->
+    <div id="taskbar" class="hidden">
+        <div class="taskbar-left">
+            <div class="taskbar-clock" id="clock">00:00:00</div>
+        </div>
+        
+        <div class="taskbar-center" id="taskbar-items">
+            <!-- Les applications ouvertes au CENTRE -->
+        </div>
+        
+        <div class="taskbar-right">
+            <div class="taskbar-item" id="task-parametres">Paramètres</div>
+        </div>
+    </div>
+    
+    <!-- Effets CRT -->
+    <div class="crt-overlay crt-flicker"></div>
+    <div class="crt-effect"></div>
+    <div class="scanlines"></div>
+    
+    <!-- NOUVEAU: Particules augmentées -->
+    <div class="particles" id="particles-container"></div>
+    
+    <!-- NOUVEAU: Étoiles fixes -->
+    <div id="stars-container"></div>
+
+    <audio id="bg-music" loop>
+        <!-- Source audio à ajouter -->
+    </audio>
+    <audio id="sfx-hover">
+        <!-- Source audio à ajouter -->
+    </audio>
+    <audio id="sfx-confirm">
+        <!-- Source audio à ajouter -->
+    </audio>
+
+    <script>
+        // 1. Récupérer les éléments
+        const startScreen = document.getElementById('start-screen');
+        const desktop = document.getElementById('desktop');
+        const taskbar = document.getElementById('taskbar');
+        const desktopIcons = document.getElementById('desktop-icons');
+        const taskbarItems = document.getElementById('taskbar-items');
+        const clock = document.getElementById('clock');
+        const particlesContainer = document.getElementById('particles-container');
+        const starsContainer = document.getElementById('stars-container');
+
+        // 2. Configuration des applications
+        const applications = [
+            {
+                id: 'installations',
+                title: 'Installations',
+                icon: 'icon-installations',
+                content: `
+                    <div class="inventory-grid">
+                        <div class="inventory-item">
+                            <div class="icon icon-installations"></div>
+                            <div class="item-info">
+                                <h4>Développeur Full Stack</h4>
+                                <div class="item-type">Compétence Principale</div>
+                                <div class="item-desc">Développement d'applications web complètes avec React, Node.js et bases de données.</div>
+                                <div class="item-stats">
+                                    <strong>Technologies:</strong> JavaScript, TypeScript, React, Node.js, MongoDB, PostgreSQL
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="icon icon-projets"></div>
+                            <div class="item-info">
+                                <h4>Designer UI/UX</h4>
+                                <div class="item-type">Spécialisation</div>
+                                <div class="item-desc">Création d'interfaces utilisateur intuitives et d'expériences utilisateur optimisées.</div>
+                                <div class="item-stats">
+                                    <strong>Outils:</strong> Figma, Adobe XD, Photoshop, Illustrator
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="icon icon-about"></div>
+                            <div class="item-info">
+                                <h4>DevOps & Infrastructure</h4>
+                                <div class="item-type">Expertise Technique</div>
+                                <div class="item-desc">Déploiement, monitoring et optimisation d'infrastructures cloud.</div>
+                                <div class="item-stats">
+                                    <strong>Environnements:</strong> AWS, Docker, Kubernetes, CI/CD
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'projets',
+                title: 'Projets Récents',
+                icon: 'icon-projets',
+                content: `
+                    <div class="inventory-grid">
+                        <div class="inventory-item">
+                            <div class="icon icon-installations"></div>
+                            <div class="item-info">
+                                <h4>E-commerce Next.js</h4>
+                                <div class="item-type">Projet Full Stack</div>
+                                <div class="item-desc">Plateforme e-commerce avec paiement sécurisé et dashboard admin.</div>
+                                <div class="item-stats">
+                                    <strong>Stack:</strong> Next.js, Stripe, MongoDB, Tailwind<br>
+                                    <a href="#" class="retro-link">Voir le projet</a>
+                                    <a href="#" class="retro-link">Code source</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="icon icon-projets"></div>
+                            <div class="item-info">
+                                <h4>Application Mobile React Native</h4>
+                                <div class="item-type">Projet Mobile</div>
+                                <div class="item-desc">Application de suivi fitness avec synchronisation cloud.</div>
+                                <div class="item-stats">
+                                    <strong>Stack:</strong> React Native, Firebase, Redux<br>
+                                    <a href="#" class="retro-link">Voir le projet</a>
+                                    <a href="#" class="retro-link">Télécharger</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="icon icon-about"></div>
+                            <div class="item-info">
+                                <h4>Dashboard Analytics</h4>
+                                <div class="item-type">Projet Data Visualization</div>
+                                <div class="item-desc">Tableau de bord interactif pour analyse de données en temps réel.</div>
+                                <div class="item-stats">
+                                    <strong>Stack:</strong> D3.js, Express, Socket.io<br>
+                                    <a href="#" class="retro-link">Démo live</a>
+                                    <a href="#" class="retro-link">Documentation</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'about',
+                title: 'À Propos',
+                icon: 'icon-about',
+                content: `
+                    <div class="about-content">
+                        <p><strong>> PROFIL DÉVELOPPEUR FULL STACK</strong></p>
+                        <p>Passionné par la création d'expériences digitales innovantes, je combine expertise technique et sens du design pour développer des solutions web performantes.</p>
+                        
+                        <p><strong>> EXPÉRIENCE & COMPÉTENCES</strong></p>
+                        <p>• 5+ ans en développement web full stack</p>
+                        <p>• Spécialisé en JavaScript/TypeScript</p>
+                        <p>• Architecture cloud et DevOps</p>
+                        <p>• Design system et UI/UX</p>
+                        
+                        <p><strong>> CONTACT & RÉSEAUX</strong></p>
+                        <p>
+                            <a href="mailto:arthur@cieux.dev" class="retro-link">Email</a>
+                            <a href="https://github.com/arthurcieux" class="retro-link">GitHub</a>
+                            <a href="https://linkedin.com/in/arthurcieux" class="retro-link">LinkedIn</a>
+                            <a href="#" class="retro-link">CV PDF</a>
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 'parametres',
+                title: 'Paramètres Système',
+                icon: 'icon-parametres',
+                content: `
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label for="crt-effect">Effet CRT</label>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="crt-effect" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label for="music-volume">Volume Musique</label>
+                            <input type="range" id="music-volume" class="volume-control" min="0" max="100" value="50">
+                        </div>
+                        <div class="setting-item">
+                            <label for="sfx-volume">Volume SFX</label>
+                            <input type="range" id="sfx-volume" class="volume-control" min="0" max="100" value="70">
+                        </div>
+                        <div class="setting-item">
+                            <label for="particles">Effets de particules</label>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="particles" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-panel">
+                        <div class="audio-controls">
+                            <button class="audio-btn" id="play-btn">PLAY</button>
+                            <button class="audio-btn" id="pause-btn">PAUSE</button>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="music-progress"></div>
+                        </div>
+                        <button class="button" id="reset-btn">Reset System</button>
+                    </div>
+                `
+            }
+        ];
+
+        // 3. État global
+        let openWindows = [];
+        let zIndexCounter = 1000;
+        let isDragging = false;
+        let currentDragElement = null;
+        let dragOffset = { x: 0, y: 0 };
+
+        // 4. Initialisation au clic sur l'écran de démarrage
+        startScreen.addEventListener('click', () => {
+            startScreen.classList.add('hidden');
+            desktop.classList.remove('hidden');
+            taskbar.classList.remove('hidden');
+            
+            createDesktopIcons();
+            updateClock();
+            setInterval(updateClock, 1000);
+            
+            createParticles();
+            createStars();
+            
+            // Démarrer la musique de fond
+            const bgMusic = document.getElementById('bg-music');
+            bgMusic.volume = 0.5;
+            
+            // Effet sonore de démarrage
+            playSound('sfx-confirm');
+        });
+
+        // 5. Création des icônes du bureau en cercle
+        function createDesktopIcons() {
+            const radius = 150;
+            const centerX = 200;
+            const centerY = 200;
+            const angleStep = (2 * Math.PI) / applications.length;
+            
+            applications.forEach((app, index) => {
+                const angle = index * angleStep;
+                const x = centerX + radius * Math.cos(angle) - 40;
+                const y = centerY + radius * Math.sin(angle) - 40;
+                
+                const icon = document.createElement('div');
+                icon.className = 'desktop-icon';
+                icon.style.left = `${x}px`;
+                icon.style.top = `${y}px`;
+                icon.innerHTML = `
+                    <div class="icon ${app.icon}"></div>
+                    <span>${app.title}</span>
+                `;
+                
+                icon.addEventListener('click', () => openWindow(app));
+                icon.addEventListener('mouseenter', () => playSound('sfx-hover'));
+                
+                desktopIcons.appendChild(icon);
+            });
+        }
+
+        // 6. Gestion des fenêtres
+        function openWindow(app) {
+            // Fermer la fenêtre si elle est déjà ouverte
+            const existingWindow = document.getElementById(`window-${app.id}`);
+            if (existingWindow) {
+                existingWindow.style.zIndex = ++zIndexCounter;
+                existingWindow.classList.remove('window-opening');
+                void existingWindow.offsetWidth; // Trigger reflow
+                existingWindow.classList.add('window-opening');
+                return;
+            }
+            
+            const windowElement = document.createElement('div');
+            windowElement.className = 'content-window window-opening';
+            windowElement.id = `window-${app.id}`;
+            windowElement.style.zIndex = ++zIndexCounter;
+            
+            // Position aléatoire mais dans la vue
+            const maxX = window.innerWidth - 400;
+            const maxY = window.innerHeight - 300;
+            windowElement.style.left = `${Math.random() * maxX * 0.5}px`;
+            windowElement.style.top = `${Math.random() * maxY * 0.5}px`;
+            
+            windowElement.innerHTML = `
+                <div class="window-header">
+                    <h3 class="window-title">${app.title}</h3>
+                    <div class="window-controls">
+                        <button class="window-btn fullscreen-btn" title="Plein écran">⛶</button>
+                        <button class="window-btn resize-btn" title="Redimensionner">□</button>
+                        <button class="window-btn close-btn" title="Fermer">✕</button>
+                    </div>
+                </div>
+                <div class="window-content">
+                    ${app.content}
+                </div>
+            `;
+            
+            document.body.appendChild(windowElement);
+            openWindows.push({ id: app.id, element: windowElement });
+            
+            // Ajouter à la barre des tâches
+            addToTaskbar(app);
+            
+            // Configurer les événements
+            setupWindowEvents(windowElement, app);
+            
+            playSound('sfx-confirm');
+        }
+
+        // 7. Configuration des événements de fenêtre
+        function setupWindowEvents(windowElement, app) {
+            const header = windowElement.querySelector('.window-header');
+            const closeBtn = windowElement.querySelector('.close-btn');
+            const fullscreenBtn = windowElement.querySelector('.fullscreen-btn');
+            const resizeBtn = windowElement.querySelector('.resize-btn');
+            
+            // Déplacement en cliquant n'importe où sur le header
+            header.addEventListener('mousedown', startDrag);
+            
+            closeBtn.addEventListener('click', () => closeWindow(app.id));
+            fullscreenBtn.addEventListener('click', () => toggleFullscreen(windowElement));
+            resizeBtn.addEventListener('click', () => {
+                windowElement.style.width = '800px';
+                windowElement.style.height = '600px';
+            });
+            
+            // Focus au clic
+            windowElement.addEventListener('mousedown', () => {
+                windowElement.style.zIndex = ++zIndexCounter;
+            });
+        }
+
+        // 8. Système de déplacement amélioré
+        function startDrag(e) {
+            if (e.target.classList.contains('window-btn')) return;
+            
+            isDragging = true;
+            currentDragElement = e.currentTarget.parentElement;
+            currentDragElement.style.zIndex = ++zIndexCounter;
+            
+            const rect = currentDragElement.getBoundingClientRect();
+            dragOffset.x = e.clientX - rect.left;
+            dragOffset.y = e.clientY - rect.top;
+            
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('mouseup', stopDrag);
+            
+            e.preventDefault();
+        }
+
+        function onDrag(e) {
+            if (!isDragging || !currentDragElement) return;
+            
+            const x = e.clientX - dragOffset.x;
+            const y = e.clientY - dragOffset.y;
+            
+            // Limites de l'écran
+            const maxX = window.innerWidth - currentDragElement.offsetWidth;
+            const maxY = window.innerHeight - currentDragElement.offsetHeight;
+            
+            currentDragElement.style.left = `${Math.max(0, Math.min(x, maxX))}px`;
+            currentDragElement.style.top = `${Math.max(0, Math.min(y, maxY))}px`;
+        }
+
+        function stopDrag() {
+            isDragging = false;
+            currentDragElement = null;
+            document.removeEventListener('mousemove', onDrag);
+            document.removeEventListener('mouseup', stopDrag);
+        }
+
+        // 9. Fonctions utilitaires pour les fenêtres
+        function closeWindow(appId) {
+            const windowIndex = openWindows.findIndex(w => w.id === appId);
+            if (windowIndex > -1) {
+                const windowElement = openWindows[windowIndex].element;
+                windowElement.classList.add('window-closing');
+                
+                setTimeout(() => {
+                    document.body.removeChild(windowElement);
+                    openWindows.splice(windowIndex, 1);
+                    removeFromTaskbar(appId);
+                }, 300);
+                
+                playSound('sfx-hover');
+            }
+        }
+
+        function toggleFullscreen(windowElement) {
+            windowElement.classList.toggle('fullscreen');
+            playSound('sfx-hover');
+        }
+
+        // 10. Gestion de la barre des tâches
+        function addToTaskbar(app) {
+            const taskbarItem = document.createElement('div');
+            taskbarItem.className = 'taskbar-item';
+            taskbarItem.textContent = app.title;
+            taskbarItem.dataset.appId = app.id;
+            
+            taskbarItem.addEventListener('click', () => {
+                const windowElement = document.getElementById(`window-${app.id}`);
+                if (windowElement) {
+                    windowElement.style.zIndex = ++zIndexCounter;
+                    windowElement.classList.remove('window-opening');
+                    void windowElement.offsetWidth;
+                    windowElement.classList.add('window-opening');
+                    
+                    // Activer l'élément dans la barre des tâches
+                    document.querySelectorAll('.taskbar-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    taskbarItem.classList.add('active');
+                }
+            });
+            
+            taskbarItems.appendChild(taskbarItem);
+        }
+
+        function removeFromTaskbar(appId) {
+            const taskbarItem = document.querySelector(`.taskbar-item[data-app-id="${appId}"]`);
+            if (taskbarItem) {
+                taskbarItems.removeChild(taskbarItem);
+            }
+        }
+
+        // 11. Horloge numérique
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('fr-FR', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            clock.textContent = timeString;
+        }
+
+        // 12. Effets sonores
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log('Audio play failed:', e));
+            }
+        }
+
+        // 13. NOUVEAU: Système de particules AUGMENTÉ
+        function createParticles() {
+            const particleCount = 200; // Augmenté de 50 à 200
+            
+            for (let i = 0; i < particleCount; i++) {
+                createParticle();
+            }
+        }
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            const sizes = ['small', 'medium', 'large'];
+            const sizeClass = sizes[Math.floor(Math.random() * sizes.length)];
+            
+            particle.className = `particle ${sizeClass}`;
+            
+            // Position aléatoire
+            const startX = Math.random() * window.innerWidth;
+            const duration = Math.random() * 15 + 10;
+            const delay = Math.random() * 10;
+            
+            particle.style.left = `${startX}px`;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${delay}s`;
+            
+            particlesContainer.appendChild(particle);
+            
+            // Recréer la particule après son animation
+            setTimeout(() => {
+                if (particle.parentNode === particlesContainer) {
+                    particlesContainer.removeChild(particle);
+                    createParticle();
+                }
+            }, (duration + delay) * 1000);
+        }
+
+        // 14. NOUVEAU: Création d'étoiles fixes
+        function createStars() {
+            const starCount = 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                const sizes = ['small', 'medium', 'large'];
+                const sizeClass = sizes[Math.floor(Math.random() * sizes.length)];
+                
+                star.className = `star ${sizeClass}`;
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 15. Gestion des paramètres
+        document.addEventListener('DOMContentLoaded', function() {
+            // Écouteurs pour les paramètres
+            document.getElementById('crt-effect').addEventListener('change', function(e) {
+                const crtElements = document.querySelectorAll('.crt-overlay, .crt-effect, .scanlines');
+                crtElements.forEach(el => {
+                    el.style.display = e.target.checked ? 'block' : 'none';
+                });
+            });
+            
+            document.getElementById('particles').addEventListener('change', function(e) {
+                particlesContainer.style.display = e.target.checked ? 'block' : 'none';
+            });
+            
+            document.getElementById('music-volume').addEventListener('input', function(e) {
+                document.getElementById('bg-music').volume = e.target.value / 100;
+            });
+            
+            // Contrôles audio
+            document.getElementById('play-btn').addEventListener('click', function() {
+                document.getElementById('bg-music').play();
+            });
+            
+            document.getElementById('pause-btn').addEventListener('click', function() {
+                document.getElementById('bg-music').pause();
+            });
+            
+            // Reset system
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                if (confirm('Redémarrer le système?')) {
+                    location.reload();
+                }
+            });
+        });
+
+        // 16. Redimensionnement responsive
+        window.addEventListener('resize', function() {
+            // Recréer les étoiles et particules
+            starsContainer.innerHTML = '';
+            particlesContainer.innerHTML = '';
+            createStars();
+            createParticles();
+        });
+
+        // 17. Empêcher le menu contextuel
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+    </script>
+</body>
+</html>
