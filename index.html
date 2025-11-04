@@ -1089,16 +1089,17 @@
                     </div>
                     
                     <style>
+                    <style>
                         @keyframes blink {
                             0%, 100% { opacity: 0.2; }
                             50% { opacity: 1; }
                         }
                         
-                        #floor-projector {
+                        .floor-projector {
                             transition: all 0.3s;
                         }
                         
-                        #floor-projector:hover {
+                        .floor-projector:hover {
                             box-shadow: 0 0 20px var(--accent-blue);
                             transform: scale(1.02);
                         }
@@ -1118,6 +1119,24 @@
                             background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
                             transform: rotate(45deg);
                             animation: shine 3s infinite;
+                        }
+
+                        /* AMÉLIORATION DES BOUTONS */
+                        .retro-link {
+                            display: inline-block !important;
+                            padding: 6px 12px !important;
+                            margin: 2px !important;
+                            min-width: 120px;
+                            text-align: center;
+                            border: 1px solid var(--accent-yellow) !important;
+                            background: rgba(255, 204, 0, 0.1) !important;
+                        }
+
+                        .retro-link:hover {
+                            background: var(--accent-yellow) !important;
+                            color: var(--primary-bg) !important;
+                            transform: translateY(-2px) !important;
+                            box-shadow: 0 4px 8px rgba(255, 204, 0, 0.3) !important;
                         }
                     </style>
                 `
@@ -1817,15 +1836,20 @@
 
         // Gestion des événements pour les liens du projet
         function setupSousLeFluxLinks() {
-            const launchBtn = document.getElementById('launch-sous-le-flux-btn');
-            if (launchBtn) {
-                launchBtn.addEventListener('click', launchSousLeFlux);
-            }
-            
-            const floorProjector = document.getElementById('floor-projector');
-            if (floorProjector) {
-                floorProjector.addEventListener('click', launchSousLeFlux);
-            }
+            // Utiliser event delegation pour gérer les clics
+            document.addEventListener('click', function(e) {
+                // Bouton "Lancer le projet complet"
+                if (e.target.classList.contains('launch-project-btn')) {
+                    launchSousLeFlux();
+                    e.preventDefault();
+                }
+                
+                // Prévisualisation
+                if (e.target.closest('.floor-projector')) {
+                    launchSousLeFlux();
+                    e.preventDefault();
+                }
+            });
         }
 
         // Configurer les liens quand une fenêtre projets s'ouvre
