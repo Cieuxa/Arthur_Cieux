@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PixelOS - Portfolio Interactif Rétro</title>
-    
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        /* --- Variables CSS --- */
         :root {
             --primary-bg: #0a0a1a;
             --primary-text: #e0e0e0;
@@ -16,32 +14,22 @@
             --accent-blue: #00aaff;
             --accent-purple: #800080;
             --accent-red: #ff0000;
-            --neon-glow: 0 0 10px currentColor, 0 0 20px currentColor;
+            --accent-green: #00FF66;
         }
-
-        /* --- 1. Ambiance Globale --- */
+        * { box-sizing: border-box; }
         body {
             background-color: var(--primary-bg);
             color: var(--primary-text);
             font-family: 'Press Start 2P', cursive;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
             margin: 0;
-            image-rendering: pixelated;
             position: relative;
             font-size: 12px;
-            line-height: 1.4;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
             user-select: none;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect x="0" y="0" width="16" height="16" fill="%23ffcc00"/><rect x="4" y="4" width="8" height="8" fill="%230a0a1a"/></svg>'), auto;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect fill="%23ffcc00" width="16" height="16"/><rect fill="%230a0a1a" x="4" y="4" width="8" height="8"/></svg>'), auto;
         }
-
-        /* --- 2. Écran "Press Start" --- */
+        
         #start-screen {
             text-align: center;
             cursor: pointer;
@@ -50,183 +38,187 @@
             background: rgba(10, 10, 26, 0.95);
             border: 4px solid var(--primary-text);
             box-shadow: 0 0 0 4px var(--primary-bg), 0 0 30px rgba(128, 0, 128, 0.7);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-
-        #start-screen::before {
-            content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 204, 0, 0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
-
         #start-screen:hover {
-            transform: scale(1.08) rotate(1deg);
-            box-shadow: 0 0 0 4px var(--primary-bg), 0 0 50px rgba(128, 0, 128, 0.9);
+            transform: translate(-50%, -50%) scale(1.05);
             border-color: var(--accent-yellow);
+            box-shadow: 0 0 0 4px var(--primary-bg), 0 0 50px rgba(128, 0, 128, 0.9);
         }
-
         #start-screen h1 {
             font-size: 1.8rem;
             color: #d0d0ff;
-            text-shadow: 3px 3px 0px var(--accent-purple), 6px 6px 0px rgba(128, 0, 128, 0.3);
-            margin-bottom: 15px;
+            text-shadow: 3px 3px 0px var(--accent-purple);
+            margin: 15px 0;
             letter-spacing: 2px;
-            position: relative;
-            z-index: 2;
         }
-
-        #start-screen h1:nth-child(2) {
+        #start-screen h1:nth-of-type(2) {
             color: var(--accent-yellow);
-            text-shadow: 2px 2px 0px var(--accent-purple);
-            margin-bottom: 25px;
         }
-
         .terminal-line {
             font-size: 0.7rem;
             color: var(--accent-blue);
             margin: 5px 0;
-            opacity: 0;
-            animation: typeIn 0.5s forwards;
+            text-align: left;
+            display: inline-block;
         }
-
-        .terminal-line:nth-child(1) { animation-delay: 0.5s; }
-        .terminal-line:nth-child(2) { animation-delay: 1s; }
-        .terminal-line:nth-child(3) { animation-delay: 1.5s; }
-
-        .blink {
-            animation: blink-animation 1s steps(5, start) infinite;
-        }
-
-        @keyframes blink-animation {
-            to { visibility: hidden; }
-        }
-
-        @keyframes typeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes shine {
-            0% { transform: rotate(45deg) translateX(-100%); }
-            100% { transform: rotate(45deg) translateX(100%); }
-        }
-
-        /* --- 3. Animation et Utilitaire --- */
-        .hidden {
-            display: none !important;
-        }
-
-        /* --- 4. Fond étoilé (Amélioré) --- */
-        .star {
+        .blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .hidden { display: none !important; }
+        
+        #desktop {
             position: absolute;
-            background: #ffffff;
-            border-radius: 50%;
-            animation: twinkle 3s infinite alternate;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: calc(100vh - 44px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
         }
-
-        .star.small {
-            width: 1px;
-            height: 1px;
-            animation-duration: 2s;
+        .desktop-icons-circle {
+            position: relative;
+            width: 400px;
+            height: 400px;
         }
-
-        .star.medium {
-            width: 2px;
-            height: 2px;
-            animation-duration: 4s;
+        .desktop-icon {
+            position: absolute;
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 8px;
+            text-align: center;
+            border: 2px solid transparent;
         }
-
-        .star.large {
-            width: 3px;
-            height: 3px;
-            animation-duration: 6s;
+        .desktop-icon:hover {
+            transform: scale(1.1);
+            border: 2px dashed var(--accent-yellow);
+            background-color: rgba(224, 224, 224, 0.2);
         }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+        .desktop-icon .icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 8px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: all 0.3s;
         }
-
-        /* --- 5. Fenêtres de contenu --- */
+        .desktop-icon:hover .icon {
+            filter: brightness(1.2);
+        }
+        .desktop-icon span {
+            font-size: 0.7rem;
+            color: var(--primary-text);
+            text-shadow: 1px 1px 0 var(--primary-bg);
+            padding: 2px 4px;
+            background-color: rgba(10, 10, 26, 0.5);
+            transition: all 0.3s;
+        }
+        .desktop-icon:hover span {
+            background-color: rgba(255, 204, 0, 0.8);
+            color: var(--primary-bg);
+        }
+        
+        #taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 44px;
+            background: rgba(20, 20, 40, 0.95);
+            border-top: 4px solid var(--primary-text);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            box-sizing: border-box;
+            gap: 10px;
+        }
+        .taskbar-clock {
+            font-size: 0.7rem;
+            color: var(--primary-text);
+            min-width: 100px;
+            text-align: center;
+        }
+        .taskbar-center {
+            flex: 1;
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+        }
+        .taskbar-item {
+            font-size: 0.7rem;
+            padding: 0 12px;
+            background-color: var(--primary-text);
+            color: var(--primary-bg);
+            border: 2px solid var(--primary-bg);
+            cursor: pointer;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            box-shadow: 2px 2px 0 var(--primary-bg);
+        }
+        .taskbar-item:hover {
+            background-color: var(--accent-yellow);
+            transform: translateY(-2px);
+        }
+        .taskbar-item.active {
+            background-color: var(--accent-yellow);
+        }
+        
         .content-window {
             position: fixed;
             background: rgba(20, 20, 40, 0.98);
             border: 4px solid var(--primary-text);
-            box-shadow: 0 0 0 4px var(--primary-bg), 0 0 30px rgba(128, 0, 128, 0.7);
-            padding: 0;
+            box-shadow: 0 0 30px rgba(128, 0, 128, 0.7);
             width: 600px;
             height: 400px;
-            max-height: 80vh;
-            overflow: hidden;
             z-index: 1000;
-            resize: both;
-            min-width: 400px;
-            min-height: 300px;
-            backdrop-filter: blur(5px);
+            overflow: hidden;
+            animation: window-open 0.5s ease-out;
         }
-
-        .content-window::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px),
-                repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0px, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 2px);
-            opacity: 0.3;
+        @keyframes window-open {
+            0% { opacity: 0; transform: scale(0.7); }
+            100% { opacity: 1; transform: scale(1); }
         }
-
         .content-window.fullscreen {
             width: 100% !important;
             height: calc(100vh - 44px) !important;
-            top: 0 !important;
             left: 0 !important;
-            max-width: none;
-            max-height: none;
-            resize: none;
-            z-index: 9999;
+            top: 0 !important;
         }
-
+        
         .window-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0;
             padding: 15px;
             border-bottom: 2px solid var(--primary-text);
             cursor: move;
-            user-select: none;
-            padding-right: 100px;
             background: rgba(10, 10, 26, 0.7);
-            width: 100%;
-            box-sizing: border-box;
+            user-select: none;
         }
-
         .window-title {
             color: var(--accent-yellow);
             font-size: 0.9rem;
             margin: 0;
-            text-shadow: 1px 1px 0px rgba(0,0,0,0.8);
         }
-
         .window-controls {
-            position: absolute;
-            top: 8px;
-            right: 8px;
             display: flex;
             gap: 5px;
         }
-
         .window-btn {
             background: none;
             border: 2px solid var(--primary-text);
@@ -241,416 +233,99 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
         }
-
-        .window-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .window-btn:hover::before {
-            left: 100%;
-        }
-
         .close-btn:hover {
             background-color: var(--accent-red);
-            color: #ffffff;
-            transform: scale(1.1);
-            box-shadow: 0 0 10px var(--accent-red);
+            color: white;
         }
-
-        .resize-btn:hover {
-            background-color: var(--accent-yellow);
-            color: var(--primary-bg);
-            transform: scale(1.1);
-            box-shadow: 0 0 10px var(--accent-yellow);
-        }
-
         .fullscreen-btn:hover {
             background-color: var(--accent-blue);
-            color: #ffffff;
-            transform: scale(1.1);
-            box-shadow: 0 0 10px var(--accent-blue);
+            color: white;
         }
-
-        /* Zone de contenu avec défilement */
         .window-content {
             height: calc(100% - 60px);
             overflow-y: auto;
             padding: 15px;
-            padding-right: 20px;
-            box-sizing: border-box;
         }
-
-        /* Style de la barre de défilement améliorée */
         .window-content::-webkit-scrollbar {
-            width: 14px;
+            width: 10px;
         }
-
-        .window-content::-webkit-scrollbar-track {
-            background: rgba(10, 10, 26, 0.5);
-            border: 2px solid var(--primary-text);
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
-        }
-
         .window-content::-webkit-scrollbar-thumb {
             background: var(--accent-yellow);
-            border: 2px solid var(--primary-text);
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+            border: 1px solid var(--primary-text);
         }
-
-        .window-content::-webkit-scrollbar-thumb:hover {
-            background: #ffd700;
-            box-shadow: 0 0 10px var(--accent-yellow);
-        }
-
-        /* Indicateur de redimensionnement */
-        .content-window::after {
-            content: '';
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            width: 12px;
-            height: 12px;
-            background: linear-gradient(135deg, transparent 50%, var(--accent-yellow) 50%);
-            cursor: se-resize;
-            z-index: 1001;
-        }
-
-        /* Animations de Fenêtre améliorées */
-        @keyframes window-open {
-            0% { opacity: 0; transform: scale(0.7) rotate(-5deg); }
-            70% { opacity: 1; transform: scale(1.05) rotate(2deg); }
-            100% { opacity: 1; transform: scale(1) rotate(0); }
-        }
-
-        @keyframes window-close {
-            0% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0.8); }
-        }
-
-        .window-opening {
-            animation: window-open 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        .window-closing {
-            animation: window-close 0.3s ease-out forwards;
-        }
-
-        /* --- 6. Styles du Bureau --- */
-        #desktop {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: calc(100vh - 44px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .desktop-icons-circle {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            width: 400px;
-            height: 400px;
-        }
-
-        .desktop-icon {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 80px;
-            padding: 8px;
-            cursor: pointer;
-            text-align: center;
-            border: 2px solid transparent;
-            position: absolute;
-            transition: all 0.3s;
-        }
-
-        .desktop-icon .icon {
-            width: 48px;
-            height: 48px;
-            image-rendering: pixelated; 
-            margin-bottom: 8px;
-            transition: all 0.3s;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        .desktop-icon span {
-            font-size: 0.7rem;
-            color: var(--primary-text);
-            text-shadow: 1px 1px 0 var(--primary-bg);
-            padding: 2px 4px;
-            background-color: rgba(10, 10, 26, 0.5);
-            transition: all 0.3s;
-        }
-
-        .desktop-icon:hover {
-            background-color: rgba(224, 224, 224, 0.2);
-            border: 2px dashed var(--accent-yellow);
-            transform: scale(1.1);
-        }
-
-        .desktop-icon:hover .icon {
-            filter: brightness(1.2);
-        }
-
-        .desktop-icon:hover span {
-            background-color: rgba(255, 204, 0, 0.8);
-            color: var(--primary-bg);
-        }
-
-        /* --- 7. Styles de la Barre des Tâches --- */
-        #taskbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 44px;
-            background: rgba(20, 20, 40, 0.95);
-            border-top: 4px solid var(--primary-text);
-            box-shadow: 0 0 0 4px var(--primary-bg);
-            z-index: 5000;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 10px;
-            box-sizing: border-box;
-            backdrop-filter: blur(5px);
-        }
-
-        .taskbar-left {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            height: 100%;
-            flex: 0 0 auto;
-        }
-
-        .taskbar-center {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            height: 100%;
-            flex: 1;
-            justify-content: center;
-            overflow-x: auto;
-            padding: 0 10px;
-        }
-
-        .taskbar-right {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            height: 100%;
-            flex: 0 0 auto;
-            justify-content: flex-end;
-        }
-
-        .taskbar-item {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.7rem;
-            padding: 0 12px;
-            display: flex;
-            align-items: center;
-            background-color: var(--primary-text);
-            color: var(--primary-bg);
-            border: 2px solid var(--primary-bg);
-            box-shadow: 2px 2px 0 var(--primary-bg);
-            cursor: pointer;
-            height: 32px;
-            white-space: nowrap;
-            max-width: 150px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            flex-shrink: 0;
-            transition: all 0.3s;
-        }
-
-        .taskbar-item:hover {
-            background-color: var(--accent-yellow);
-            transform: translateY(-2px);
-            box-shadow: 2px 4px 0 var(--primary-bg);
-        }
-
-        .taskbar-item.active {
-            background-color: var(--accent-yellow);
-            box-shadow: inset 2px 2px 0 var(--primary-bg);
-            transform: translateY(1px);
-        }
-
-        /* Horloge améliorée */
-        .taskbar-clock {
-            padding: 0 12px;
-            display: flex;
-            align-items: center;
-            font-size: 0.7rem;
-            color: var(--primary-text);
-            background-color: rgba(10, 10, 26, 0.5);
-            height: 32px;
-            min-width: 100px;
-            justify-content: center;
-            border: 2px solid var(--primary-text);
-            flex-shrink: 0;
-        }
-
-        /* --- 8. Styles de Contenu --- */
+        
         .inventory-grid {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-
         .inventory-item {
-            display: flex;
-            gap: 12px;
             background: rgba(255, 255, 255, 0.1);
             padding: 12px;
             border: 2px solid var(--primary-text);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .inventory-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.6s;
-        }
-
-        .inventory-item:hover::before {
-            left: 100%;
-        }
-
-        .inventory-item:hover {
-            background: rgba(128, 0, 128, 0.25);
-            transform: translateX(8px) scale(1.02);
-            border-color: var(--accent-yellow);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .inventory-item img {
-            width: 48px;
-            height: 48px;
-            image-rendering: pixelated;
-            border: 2px solid var(--primary-text);
-            flex-shrink: 0;
             transition: all 0.3s;
         }
-
-        .inventory-item:hover img {
+        .inventory-item:hover {
+            background: rgba(128, 0, 128, 0.25);
             border-color: var(--accent-yellow);
-            transform: scale(1.1);
+            transform: translateX(8px);
         }
-
-        .item-info {
-            flex: 1;
-            min-width: 0;
-        }
-
         .item-info h4 {
             color: var(--accent-yellow);
-            margin: 0 0 4px 0;
+            margin: 0 0 5px 0;
             font-size: 0.8rem;
-            text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
         }
-
         .item-type {
             font-size: 0.6rem;
             color: #aaa;
-            margin: 0 0 8px 0;
+            margin-bottom: 5px;
         }
-
         .item-desc {
             font-size: 0.6rem;
             line-height: 1.4;
             margin-bottom: 10px;
-            word-wrap: break-word;
         }
-
         .item-stats {
             font-size: 0.6rem;
             border-top: 1px dotted var(--primary-text);
             padding-top: 8px;
-            line-height: 1.5;
         }
-
-        /* Liens Rétro améliorés */
+        
         .retro-link {
             color: var(--accent-yellow);
             text-decoration: none;
-            border-bottom: 1px dotted var(--accent-yellow);
-            margin-right: 12px;
-            font-size: 0.6rem;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
+            border: 1px solid var(--accent-yellow);
             padding: 6px 12px;
             margin: 2px;
-            min-width: 120px;
-            text-align: center;
-            border: 1px solid var(--accent-yellow);
+            font-size: 0.6rem;
+            cursor: pointer;
             background: rgba(255, 204, 0, 0.1);
+            display: inline-block;
+            transition: all 0.3s;
+            font-family: 'Press Start 2P', cursive;
         }
-
-        .retro-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .retro-link:hover::before {
-            left: 100%;
-        }
-
         .retro-link:hover {
             color: var(--primary-bg);
             background-color: var(--accent-yellow);
-            padding: 6px 12px;
-            margin-right: 8px;
             box-shadow: 0 0 10px var(--accent-yellow);
-            transform: translateY(-2px);
         }
-
-        .audio-player audio {
-            filter: sepia(1) hue-rotate(160deg) saturate(3);
-            width: 100%;
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
-
-        /* --- 9. Effets de curseur personnalisé --- */
-        .desktop-icon:hover, .window-btn:hover, .taskbar-item:hover {
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect x="0" y="0" width="16" height="16" fill="%23ffcc00"/><rect x="4" y="4" width="8" height="8" fill="%230a0a1a"/></svg>'), auto;
+        .setting-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
-
-        /* --- 10. Effet CRT --- */
+        .setting-item label {
+            font-size: 0.6rem;
+            color: var(--accent-yellow);
+        }
+        
         .crt-overlay {
             position: fixed;
             top: 0;
@@ -658,164 +333,11 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 9999;
-            background: 
-                repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px),
-                repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0px, rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 2px);
-            opacity: 0.4;
+            z-index: 900;
+            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px);
+            opacity: 0.3;
         }
-
-        .crt-effect {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9998;
-            background: radial-gradient(ellipse at center, rgba(10, 10, 26, 0) 0%, rgba(10, 10, 26, 0.8) 100%);
-            opacity: 0.6;
-        }
-
-        .scanlines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.1) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 10000;
-            animation: scanline 10s linear infinite;
-        }
-
-        .crt-flicker {
-            animation: flicker 5s infinite;
-        }
-
-        @keyframes flicker {
-            0% { opacity: 0.9; }
-            2% { opacity: 0.8; }
-            4% { opacity: 0.9; }
-            8% { opacity: 0.7; }
-            70% { opacity: 0.9; }
-            100% { opacity: 0.9; }
-        }
-
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
-
-        /* --- 11. Fenêtre de paramètres --- */
-        .settings-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .setting-item {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .setting-item label {
-            font-size: 0.6rem;
-            color: var(--accent-yellow);
-            text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
-        }
-
-        .setting-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #333;
-            transition: .4s;
-            border: 2px solid var(--primary-text);
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 2px;
-            background-color: var(--primary-text);
-            transition: .4s;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: var(--accent-yellow);
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(26px);
-        }
-
-        .volume-control {
-            width: 100%;
-        }
-
-        .button {
-            background-color: var(--primary-text);
-            color: var(--primary-bg);
-            border: 2px solid var(--primary-bg);
-            padding: 8px 16px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.6rem;
-            cursor: pointer;
-            box-shadow: 2px 2px 0 var(--primary-bg);
-            transition: all 0.3s;
-        }
-
-        .button:hover {
-            background-color: var(--accent-yellow);
-            transform: translateY(-2px);
-            box-shadow: 2px 4px 0 var(--primary-bg);
-        }
-
-        .button:active {
-            transform: translateY(1px);
-            box-shadow: 1px 1px 0 var(--primary-bg);
-        }
-
-        /* --- 12. Styles pour le contenu About --- */
-        .about-content {
-            font-size: 0.7rem;
-            line-height: 1.5;
-        }
-
-        .about-content p {
-            margin-bottom: 10px;
-        }
-
-        /* --- 13. Effets de particules (AUGMENTÉ) --- */
+        
         .particles {
             position: fixed;
             top: 0;
@@ -825,35 +347,13 @@
             pointer-events: none;
             z-index: 1;
         }
-
         .particle {
             position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #ffffff;
+            background: white;
             border-radius: 50%;
-            opacity: 0;
-            animation: float 15s infinite linear;
+            opacity: 0.8;
+            animation: float 20s infinite linear;
         }
-
-        .particle.small {
-            width: 1px;
-            height: 1px;
-            animation-duration: 8s;
-        }
-
-        .particle.medium {
-            width: 2px;
-            height: 2px;
-            animation-duration: 12s;
-        }
-
-        .particle.large {
-            width: 3px;
-            height: 3px;
-            animation-duration: 20s;
-        }
-
         @keyframes float {
             0% {
                 transform: translateY(100vh) translateX(0) rotate(0deg);
@@ -870,108 +370,117 @@
                 opacity: 0;
             }
         }
-
-        /* --- 14. Contrôles audio --- */
-        .control-panel {
+        
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .star {
             position: absolute;
-            bottom: 15px;
-            left: 15px;
-            right: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite alternate;
+        }
+        .star.small {
+            width: 1px;
+            height: 1px;
+            animation-duration: 2s;
+        }
+        .star.medium {
+            width: 2px;
+            height: 2px;
+            animation-duration: 4s;
+        }
+        .star.large {
+            width: 3px;
+            height: 3px;
+            animation-duration: 6s;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
         }
 
-        .audio-controls {
-            display: flex;
-            gap: 10px;
+        #terminal-display {
+            background: black;
+            color: var(--accent-green);
+            font-family: monospace;
+            padding: 10px;
+            height: 100%;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.65rem;
         }
 
-        .audio-btn {
-            background: none;
-            border: 2px solid var(--primary-text);
-            color: var(--primary-text);
-            font-family: 'Press Start 2P', cursive;
-            padding: 6px 12px;
+        .terminal-line {
+            opacity: 0;
+            animation: appear 0.2s ease forwards;
+        }
+
+        @keyframes appear {
+            to { opacity: 1; }
+        }
+
+        .music-visualizer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 80px;
+            gap: 3px;
+            margin: 20px 0;
+        }
+
+        .music-bar {
+            width: 6px;
+            background: var(--accent-green);
+            border-radius: 2px;
+            animation: equalizer 1s infinite ease-in-out;
+        }
+
+        @keyframes equalizer {
+            0%, 100% { transform: scaleY(0.3); }
+            50% { transform: scaleY(1.2); }
+        }
+
+        .track-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--primary-text);
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .track-item {
+            padding: 8px;
+            border-bottom: 1px dotted var(--primary-text);
             cursor: pointer;
             font-size: 0.6rem;
             transition: all 0.3s;
         }
 
-        .audio-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 10px currentColor;
+        .track-item:hover {
+            background: rgba(255, 204, 0, 0.2);
+            color: var(--accent-yellow);
         }
 
-        #play-btn:hover {
-            background-color: var(--accent-blue);
-            color: white;
+        .track-item:last-child {
+            border-bottom: none;
         }
-
-        #pause-btn:hover {
-            background-color: var(--accent-purple);
-            color: white;
-        }
-
-        .progress-bar {
-            flex-grow: 1;
-            height: 8px;
-            background: rgba(10, 10, 26, 0.7);
-            border: 2px solid var(--primary-text);
-            margin: 0 15px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
-            width: 0%;
-            transition: width 0.5s;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: progressShine 2s infinite;
-        }
-
-        @keyframes progressShine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        /* Icônes personnalisées */
-        .icon-installations {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" fill="%23ffcc00"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23ffcc00"/></svg>');
-        }
-
-        .icon-projets {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" fill="%2300aaff"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%2300aaff"/></svg>');
-        }
-
-        .icon-about {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" fill="%23800080"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23800080"/></svg>');
-        }
-
-        .icon-parametres {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" fill="%23ff0000"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23ff0000"/></svg>');
-        }
-
-        /* Animation blink pour les indicateurs */
-        @keyframes blink {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
-        }
+        
+        .icon-installations { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect x="8" y="8" width="32" height="32" fill="%23ffcc00"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23ffcc00"/></svg>'); }
+        .icon-projets { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect x="8" y="8" width="32" height="32" fill="%2300aaff"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%2300aaff"/></svg>'); }
+        .icon-about { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect x="8" y="8" width="32" height="32" fill="%23800080"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23800080"/></svg>'); }
+        .icon-parametres { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect x="8" y="8" width="32" height="32" fill="%23ff0000"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23ff0000"/></svg>'); }
+        .icon-musique { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect x="8" y="8" width="32" height="32" fill="%2300FF66"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%2300FF66"/></svg>'); }
     </style>
 </head>
 <body>
-
     <div id="start-screen">
         <h1>PORTFOLIO</h1>
         <h1>ARTHUR CIEUX</h1>
@@ -982,59 +491,57 @@
     </div>
 
     <div id="desktop" class="hidden">
-        <div class="desktop-icons-circle" id="desktop-icons">
-            <!-- Les icônes seront positionnées par JS en cercle -->
-        </div>
+        <div class="desktop-icons-circle" id="desktop-icons"></div>
     </div>
 
-    <!-- BARRE DES TÂCHES -->
     <div id="taskbar" class="hidden">
-        <div class="taskbar-left">
-            <div class="taskbar-clock" id="clock">00:00:00</div>
-        </div>
-        
-        <div class="taskbar-center" id="taskbar-items">
-            <!-- Les applications ouvertes au CENTRE -->
-        </div>
-        
-        <div class="taskbar-right">
-            <div class="taskbar-item" id="task-parametres">Paramètres</div>
-        </div>
+        <div class="taskbar-clock" id="clock">00:00:00</div>
+        <div class="taskbar-center" id="taskbar-items"></div>
     </div>
-    
-    <!-- Effets CRT -->
-    <div class="crt-overlay crt-flicker"></div>
-    <div class="crt-effect"></div>
-    <div class="scanlines"></div>
-    
-    <!-- Particules augmentées -->
-    <div class="particles" id="particles-container"></div>
-    
-    <!-- Étoiles fixes -->
-    <div id="stars-container"></div>
 
-    <audio id="bg-music" loop>
-        <!-- Source audio à ajouter -->
-    </audio>
-    <audio id="sfx-hover">
-        <!-- Source audio à ajouter -->
-    </audio>
-    <audio id="sfx-confirm">
-        <!-- Source audio à ajouter -->
-    </audio>
+    <div id="windows-container"></div>
+    <div class="particles" id="particles-container"></div>
+    <div id="stars-container"></div>
+    <div class="crt-overlay"></div>
 
     <script>
-        // 1. Récupérer les éléments
         const startScreen = document.getElementById('start-screen');
         const desktop = document.getElementById('desktop');
         const taskbar = document.getElementById('taskbar');
         const desktopIcons = document.getElementById('desktop-icons');
         const taskbarItems = document.getElementById('taskbar-items');
         const clock = document.getElementById('clock');
+        const windowsContainer = document.getElementById('windows-container');
         const particlesContainer = document.getElementById('particles-container');
-        const starsContainer = document.getElementById('stars-container');
 
-        // 2. Configuration des applications
+        let openWindows = {};
+        let zIndexCounter = 1000;
+        let draggedWindow = null;
+        let dragOffset = { x: 0, y: 0 };
+
+        const musicTracks = [
+            { title: 'Track 01', url: 'https://www.youtube.com/watch?v=GWEKr504FpI&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug' },
+            { title: 'Track 02', url: 'https://www.youtube.com/watch?v=LlFeTuHvWvU&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=2' },
+            { title: 'Track 03', url: 'https://www.youtube.com/watch?v=ZYdd73SOxhY&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=3' },
+            { title: 'Track 04', url: 'https://www.youtube.com/watch?v=nMb5nyoi364&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=4' },
+            { title: 'Track 05', url: 'https://www.youtube.com/watch?v=r3K5uKMca2g&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=5' },
+            { title: 'Track 06', url: 'https://www.youtube.com/watch?v=-gU_jhD4-gU&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=6' },
+            { title: 'Track 07', url: 'https://www.youtube.com/watch?v=zXWdIwlsX0k&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=7' },
+            { title: 'Track 08', url: 'https://www.youtube.com/watch?v=hkalzgipJ4k&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=8' },
+            { title: 'Track 09', url: 'https://www.youtube.com/watch?v=hAUSlgrkFW4&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=9' },
+            { title: 'Track 10', url: 'https://www.youtube.com/watch?v=7WPIITeW2oI&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=10' },
+            { title: 'Track 11', url: 'https://www.youtube.com/watch?v=aTke5TuNzpk&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=11' },
+            { title: 'Track 12', url: 'https://www.youtube.com/watch?v=YIB_i8QziJc&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=12' },
+            { title: 'Track 13', url: 'https://www.youtube.com/watch?v=So05yb9a_KU&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=13' },
+            { title: 'Track 14', url: 'https://www.youtube.com/watch?v=c-L4xUWnkAk&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=14' },
+            { title: 'Track 15', url: 'https://www.youtube.com/watch?v=mLSMTDLa7rw&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=15' },
+            { title: 'Track 16', url: 'https://www.youtube.com/watch?v=2yyUvvjWHgg&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=16' },
+            { title: 'Track 17', url: 'https://www.youtube.com/watch?v=TbP3LAuTTCY&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=17' },
+            { title: 'Track 18', url: 'https://www.youtube.com/watch?v=j4w_mQdwfaE&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=18' },
+            { title: 'Track 19', url: 'https://www.youtube.com/watch?v=MDgC7BI5W8g&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=19' },
+            { title: 'Track 20', url: 'https://www.youtube.com/watch?v=PcJOlkNMXW8&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=20' }
+        ];
+
         const applications = [
             {
                 id: 'installations',
@@ -1042,15 +549,12 @@
                 icon: 'icon-installations',
                 content: `
                     <div class="inventory-grid">
-                        <div class="inventory-item" style="text-align: center; padding: 40px; border: 2px dashed var(--accent-yellow); background: rgba(255, 204, 0, 0.1);">
-                            <div class="icon icon-installations"></div>
+                        <div class="inventory-item" style="text-align: center; padding: 40px;">
                             <div class="item-info">
                                 <h4>SYSTEM READY</h4>
                                 <div class="item-type">Compétences en Chargement</div>
                                 <div class="item-desc">Système prêt à recevoir tes vraies compétences et technologies maîtrisées.</div>
-                                <div class="item-stats">
-                                    <strong>Status:</strong> En attente de données utilisateur
-                                </div>
+                                <div class="item-stats"><strong>Status:</strong> En attente de données utilisateur</div>
                             </div>
                         </div>
                     </div>
@@ -1063,38 +567,98 @@
                 content: `
                     <div class="inventory-grid">
                         <div class="inventory-item">
-                            <div class="icon icon-projets"></div>
                             <div class="item-info">
                                 <h4>SOUS LE FLUX</h4>
                                 <div class="item-type">Video Mapping - Projection au Sol</div>
                                 <div class="item-desc">Installation immersive représentant les flux de données mondiaux en temps réel à travers une projection cartographique interactive.</div>
                                 <div class="item-stats">
                                     <strong>Technologies:</strong> Three.js, WebGL, Data Visualization<br>
-                                    <strong>Concepts:</strong> Cartographie interactive, Flux réseaux, Visualisation de données<br>
-                                    <div class="project-preview" style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--accent-purple);">
-                                        <div style="text-align: center; color: var(--accent-blue); font-size: 0.6rem; margin-bottom: 5px;">
-                                            🎥 PRÉVISUALISATION IMMERSIVE
-                                        </div>
-                                        <div id="floor-projector" style="width: 100%; height: 150px; background: #000; position: relative; overflow: hidden; border: 2px solid var(--accent-yellow); cursor: pointer;">
-                                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, #0a0a1a 0%, #1a1a3a 100%); display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                                                <div style="color: var(--accent-yellow); font-size: 0.7rem; margin-bottom: 10px;">VIDEO MAPPING - SOUS LE FLUX</div>
-                                                <div style="width: 80%; height: 2px; background: var(--accent-blue); margin: 5px 0;"></div>
-                                                <div style="display: flex; gap: 3px; margin-top: 10px;">
-                                                    <div style="width: 4px; height: 4px; background: var(--accent-yellow); animation: blink 1s infinite;"></div>
-                                                    <div style="width: 4px; height: 4px; background: var(--accent-blue); animation: blink 1s infinite 0.2s;"></div>
-                                                    <div style="width: 4px; height: 4px; background: var(--accent-purple); animation: blink 1s infinite 0.4s;"></div>
-                                                </div>
-                                                <div style="color: var(--primary-text); font-size: 0.5rem; margin-top: 15px; opacity: 0.7;">
-                                                    [CLIQUEZ POUR DÉMARRER LA PROJECTION]
-                                                </div>
-                                            </div>
+                                    <strong>Concepts:</strong> Cartographie interactive, Flux réseaux, Visualisation de données
+                                </div>
+                                <div id="floor-projector" style="width: 100%; height: 150px; background: linear-gradient(45deg, #0a0a1a 0%, #1a1a3a 100%); border: 2px solid var(--accent-yellow); margin-top: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden;">
+                                    <div style="text-align: center; z-index: 2;">
+                                        <div style="color: var(--accent-yellow); font-size: 0.7rem; margin-bottom: 10px;">VIDEO MAPPING - SOUS LE FLUX</div>
+                                        <div style="width: 80px; height: 2px; background: var(--accent-blue); margin: 5px auto;"></div>
+                                        <div style="display: flex; gap: 3px; justify-content: center; margin-top: 10px;">
+                                            <div style="width: 4px; height: 4px; background: var(--accent-yellow); animation: blink 1s infinite;"></div>
+                                            <div style="width: 4px; height: 4px; background: var(--accent-blue); animation: blink 1s infinite 0.2s;"></div>
+                                            <div style="width: 4px; height: 4px; background: var(--accent-purple); animation: blink 1s infinite 0.4s;"></div>
                                         </div>
                                     </div>
-                                    <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;">
-                                        <a href="javascript:void(0)" class="retro-link launch-project-btn">Lancer le projet complet</a>
-                                        <a href="javascript:void(0)" class="retro-link">Voir le code source</a>
-                                        <a href="javascript:void(0)" class="retro-link">Documentation technique</a>
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <a href="#" class="retro-link launch-project-btn" data-project="sous-le-flux">Lancer le projet</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="item-info">
+                                <h4>LECTURE // TERMINAL</h4>
+                                <div class="item-type">Installation Interactive - Archive Internet</div>
+                                <div class="item-desc">Installation composée d'un ordinateur exécutant seul un script lisant le fichier cc-index-table.paths (une sauvegarde de l'ensemble d'Internet à un moment donné), rendant visible la lecture du script à travers un terminal de commande.</div>
+                                <div class="item-stats">
+                                    <strong>Technologies:</strong> HTML5, JavaScript, Web APIs<br>
+                                    <strong>Concepts:</strong> Archive Internet, Visualisation données, Terminal interactif
+                                </div>
+                                <div id="terminal-preview" style="width: 100%; height: 120px; background: black; border: 2px solid var(--accent-green); margin-top: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; color: var(--accent-green); font-family: monospace; font-size: 0.5rem; padding: 10px;">
+                                    <div style="text-align: left; width: 100%; height: 100%; overflow: hidden;">
+                                        <div>>> LECTURE DU FICHIER cc-index-table.paths ...</div>
+                                        <div>[OK] Connexion à l'archive Common Crawl</div>
+                                        <div>[INFO] Lecture en cours...</div>
+                                        <div style="color: var(--accent-blue);">https://example.com/</div>
+                                        <div style="color: var(--accent-blue);">https://news.example.org/article/1</div>
+                                        <div style="color: var(--accent-blue);">https://cdn.images.net/data/2021/10/asset.png</div>
                                     </div>
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <a href="#" class="retro-link launch-project-btn" data-project="lecture-terminal">Lancer le projet</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'musique',
+                title: 'Projet Musical',
+                icon: 'icon-musique',
+                content: `
+                    <div class="inventory-grid">
+                        <div class="inventory-item">
+                            <div class="item-info">
+                                <h4>SONORITÉS CALMES & JAZZ NUMÉRIQUE</h4>
+                                <div class="item-type">Composition & Production Musicale</div>
+                                <div class="item-desc">Exploration des sonorités douces et délicates, mêlant influences jazz et esthétiques numériques. Une approche contemplative de la composition électronique distribuée sur toutes les plateformes musicales.</div>
+                                <div class="item-stats">
+                                    <strong>Genre:</strong> Jazz Numérique / Ambient Électronique<br>
+                                    <strong>Approche:</strong> Exploration sonore, synthèse de textures, atmosphères organiques<br>
+                                    <strong>Distribution:</strong> YouTube, Spotify, Apple Music, et autres plateformes
+                                </div>
+                                <div id="music-player-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #0a0a1a 0%, #1a2a1a 100%); border: 2px solid var(--accent-green); margin-top: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden;">
+                                    <div style="text-align: center; z-index: 2;">
+                                        <div style="color: var(--accent-green); font-size: 0.7rem; margin-bottom: 10px;">LECTEUR AUDIO - PROJET ARTISTIQUE</div>
+                                        <div style="display: flex; gap: 3px; justify-content: center; margin: 10px 0;">
+                                            <div style="width: 4px; height: 20px; background: var(--accent-green); animation: equalizer 1s infinite ease-in-out;"></div>
+                                            <div style="width: 4px; height: 15px; background: var(--accent-green); animation: equalizer 1s infinite 0.1s ease-in-out;"></div>
+                                            <div style="width: 4px; height: 25px; background: var(--accent-green); animation: equalizer 1s infinite 0.2s ease-in-out;"></div>
+                                            <div style="width: 4px; height: 18px; background: var(--accent-green); animation: equalizer 1s infinite 0.3s ease-in-out;"></div>
+                                            <div style="width: 4px; height: 22px; background: var(--accent-green); animation: equalizer 1s infinite 0.4s ease-in-out;"></div>
+                                        </div>
+                                        <div style="color: var(--accent-blue); font-size: 0.6rem; margin-top: 5px;">20 compositions disponibles</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <div style="position: relative; display: inline-block;">
+                                        <button class="retro-link" style="font-size: 0.6rem; background-color: rgba(0, 255, 102, 0.15); border-color: var(--accent-green); cursor: pointer; font-family: 'Press Start 2P', cursive;">PROFIL MUSICAL</button>
+                                        <div style="display: none; position: absolute; bottom: 100%; left: 0; background: rgba(20, 20, 40, 0.98); border: 2px solid var(--accent-green); z-index: 10000; min-width: 180px; margin-bottom: 5px; box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);">
+                                            <a href="https://music.apple.com/fr/album/lf/1833155912" target="_blank" style="display: block; padding: 10px 12px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.55rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🍎 Apple Music</a>
+                                            <a href="https://open.spotify.com/intl-fr/artist/0oxQsg9xEMZMl3iZHiZlBq" target="_blank" style="display: block; padding: 10px 12px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.55rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🎵 Spotify</a>
+                                            <a href="https://www.youtube.com/channel/UCH17Gl2MRr9D3kB54iBPtvg" target="_blank" style="display: block; padding: 10px 12px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.55rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">▶ YouTube</a>
+                                            <a href="https://www.qobuz.com/ca-fr/album/lf-arthur-cieux/luph0y3jjm1qb" target="_blank" style="display: block; padding: 10px 12px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.55rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">♫ Qobuz</a>
+                                            <a href="https://music.amazon.in/artists/B0DXQ4C37T/arthur-cieux" target="_blank" style="display: block; padding: 10px 12px; color: var(--accent-yellow); text-decoration: none; font-size: 0.55rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🎧 Amazon Music</a>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="retro-link launch-project-btn" data-project="musique">Lecteur Audio</a>
                                 </div>
                             </div>
                         </div>
@@ -1106,159 +670,110 @@
                 title: 'À Propos',
                 icon: 'icon-about',
                 content: `
-                    <div class="about-content">
-                        <p><strong>> PROFIL DÉVELOPPEUR FULL STACK</strong></p>
-                        <p>Passionné par la création d'expériences digitales innovantes, je combine expertise technique et sens du design pour développer des solutions web performantes.</p>
-                        
-                        <p><strong>> EXPÉRIENCE & COMPÉTENCES</strong></p>
-                        <p>• 5+ ans en développement web full stack</p>
-                        <p>• Spécialisé en JavaScript/TypeScript</p>
-                        <p>• Architecture cloud et DevOps</p>
-                        <p>• Design system et UI/UX</p>
-                        
-                        <p><strong>> CONTACT & RÉSEAUX</strong></p>
-                        <p>
-                            <a href="mailto:arthur@cieux.dev" class="retro-link">Email</a>
-                            <a href="https://github.com/arthurcieux" class="retro-link">GitHub</a>
-                            <a href="https://linkedin.com/in/arthurcieux" class="retro-link">LinkedIn</a>
-                            <a href="#" class="retro-link">CV PDF</a>
-                        </p>
+                    <div class="inventory-grid">
+                        <div class="inventory-item">
+                            <div class="item-info">
+                                <h4>> PROFIL DÉVELOPPEUR FULL STACK</h4>
+                                <div class="item-desc">Passionné par la création d'expériences digitales innovantes, je combine expertise technique et sens du design.</div>
+                                <div class="item-stats" style="margin-top: 15px;">
+                                    <strong>> EXPÉRIENCE & COMPÉTENCES</strong><br>
+                                    • 5+ ans en développement web full stack<br>
+                                    • Spécialisé en JavaScript/TypeScript<br>
+                                    • Architecture cloud et DevOps<br>
+                                    • Design system et UI/UX
+                                </div>
+                                <div style="margin-top: 15px;">
+                                    <a href="mailto:arthur@cieux.dev" class="retro-link">Email</a>
+                                    <a href="#" class="retro-link">GitHub</a>
+                                    <a href="#" class="retro-link">LinkedIn</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 `
             },
             {
                 id: 'parametres',
-                title: 'Paramètres Système',
+                title: 'Paramètres',
                 icon: 'icon-parametres',
                 content: `
                     <div class="settings-grid">
                         <div class="setting-item">
-                            <label for="crt-effect">Effet CRT</label>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="crt-effect" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                            <label>Version</label>
+                            <div>PixelOS v2.1.5</div>
                         </div>
                         <div class="setting-item">
-                            <label for="music-volume">Volume Musique</label>
-                            <input type="range" id="music-volume" class="volume-control" min="0" max="100" value="50">
+                            <label>Résolution</label>
+                            <div style="font-size: 0.6rem;">1920x1080</div>
                         </div>
                         <div class="setting-item">
-                            <label for="sfx-volume">Volume SFX</label>
-                            <input type="range" id="sfx-volume" class="volume-control" min="0" max="100" value="70">
+                            <label>Thème</label>
+                            <div style="font-size: 0.6rem;">Neon Rétro</div>
                         </div>
                         <div class="setting-item">
-                            <label for="particles">Effets de particules</label>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="particles" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                            <label>Statut</label>
+                            <div style="font-size: 0.6rem;">● Actif</div>
                         </div>
                     </div>
-                    <div class="control-panel">
-                        <div class="audio-controls">
-                            <button class="audio-btn" id="play-btn">PLAY</button>
-                            <button class="audio-btn" id="pause-btn">PAUSE</button>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="music-progress"></div>
-                        </div>
-                        <button class="button" id="reset-btn">Reset System</button>
-                    </div>
+                    <button style="margin-top: 20px; background-color: var(--primary-text); color: var(--primary-bg); border: 2px solid var(--primary-bg); padding: 8px 16px; cursor: pointer; font-family: 'Press Start 2P'; font-size: 0.6rem; box-shadow: 2px 2px 0 var(--primary-bg);">Reset System</button>
                 `
             }
         ];
 
-        // 3. État global
-        let openWindows = [];
-        let zIndexCounter = 1000;
-        let isDragging = false;
-        let currentDragElement = null;
-        let dragOffset = { x: 0, y: 0 };
-
-        // 4. Initialisation au clic sur l'écran de démarrage
         startScreen.addEventListener('click', () => {
             startScreen.classList.add('hidden');
             desktop.classList.remove('hidden');
             taskbar.classList.remove('hidden');
-            
             createDesktopIcons();
-            updateClock();
-            setInterval(updateClock, 1000);
-            
             createParticles();
             createStars();
-            
-            // Démarrer la musique de fond
-            const bgMusic = document.getElementById('bg-music');
-            bgMusic.volume = 0.5;
-            
-            // Effet sonore de démarrage
-            playSound('sfx-confirm');
+            updateClock();
+            setInterval(updateClock, 1000);
         });
 
-        // 5. Création des icônes du bureau en cercle
         function createDesktopIcons() {
             const radius = 150;
-            const centerX = 200;
-            const centerY = 200;
             const angleStep = (2 * Math.PI) / applications.length;
             
             applications.forEach((app, index) => {
                 const angle = index * angleStep;
-                const x = centerX + radius * Math.cos(angle) - 40;
-                const y = centerY + radius * Math.sin(angle) - 40;
+                const x = radius * Math.cos(angle);
+                const y = radius * Math.sin(angle);
                 
                 const icon = document.createElement('div');
                 icon.className = 'desktop-icon';
-                icon.style.left = `${x}px`;
-                icon.style.top = `${y}px`;
+                icon.style.left = `calc(50% + ${x}px - 40px)`;
+                icon.style.top = `calc(50% + ${y}px - 40px)`;
                 icon.innerHTML = `
                     <div class="icon ${app.icon}"></div>
                     <span>${app.title}</span>
                 `;
                 
                 icon.addEventListener('click', () => openWindow(app));
-                icon.addEventListener('mouseenter', () => playSound('sfx-hover'));
-                
                 desktopIcons.appendChild(icon);
             });
         }
 
-        // 6. Gestion des fenêtres
         function openWindow(app) {
-            // Fermer la fenêtre si elle est déjà ouverte
-            const existingWindow = document.getElementById(`window-${app.id}`);
-            if (existingWindow) {
-                existingWindow.style.zIndex = ++zIndexCounter;
-                existingWindow.classList.remove('window-opening');
-                void existingWindow.offsetWidth;
-                existingWindow.classList.add('window-opening');
+            if (openWindows[app.id]) {
+                const w = openWindows[app.id];
+                w.style.zIndex = ++zIndexCounter;
                 return;
             }
             
             const windowElement = document.createElement('div');
-            windowElement.className = 'content-window window-opening';
+            windowElement.className = 'content-window';
             windowElement.id = `window-${app.id}`;
             windowElement.style.zIndex = ++zIndexCounter;
-            
-            // Position aléatoire mais dans la vue
-            const maxX = window.innerWidth - 400;
-            const maxY = window.innerHeight - 300;
-            windowElement.style.left = `${Math.random() * maxX * 0.5}px`;
-            windowElement.style.top = `${Math.random() * maxY * 0.5}px`;
+            windowElement.style.left = `${100 + Math.random() * 300}px`;
+            windowElement.style.top = `${50 + Math.random() * 200}px`;
             
             windowElement.innerHTML = `
                 <div class="window-header">
                     <h3 class="window-title">${app.title}</h3>
                     <div class="window-controls">
-                        <button class="window-btn fullscreen-btn" title="Plein écran">⛶</button>
-                        <button class="window-btn resize-btn" title="Redimensionner">□</button>
-                        <button class="window-btn close-btn" title="Fermer">✕</button>
+                        <button class="window-btn fullscreen-btn">□</button>
+                        <button class="window-btn close-btn">✕</button>
                     </div>
                 </div>
                 <div class="window-content">
@@ -1266,193 +781,119 @@
                 </div>
             `;
             
-            document.body.appendChild(windowElement);
-            openWindows.push({ id: app.id, element: windowElement });
-            
-            // Ajouter à la barre des tâches
+            windowsContainer.appendChild(windowElement);
+            openWindows[app.id] = windowElement;
             addToTaskbar(app);
-            
-            // Configurer les événements
             setupWindowEvents(windowElement, app);
-            
-            // Configurer les liens du projet "Sous le Flux"
-            if (app.id === 'projets') {
-                setTimeout(setupSousLeFluxLinks, 100);
-            }
-            
-            playSound('sfx-confirm');
         }
 
-        // 7. Configuration des événements de fenêtre
         function setupWindowEvents(windowElement, app) {
             const header = windowElement.querySelector('.window-header');
             const closeBtn = windowElement.querySelector('.close-btn');
             const fullscreenBtn = windowElement.querySelector('.fullscreen-btn');
-            const resizeBtn = windowElement.querySelector('.resize-btn');
-            
-            header.addEventListener('mousedown', startDrag);
-            
-            closeBtn.addEventListener('click', () => closeWindow(app.id));
-            fullscreenBtn.addEventListener('click', () => toggleFullscreen(windowElement));
-            resizeBtn.addEventListener('click', () => {
-                windowElement.style.width = '800px';
-                windowElement.style.height = '600px';
+
+            header.addEventListener('mousedown', (e) => {
+                draggedWindow = windowElement;
+                const rect = windowElement.getBoundingClientRect();
+                dragOffset.x = e.clientX - rect.left;
+                dragOffset.y = e.clientY - rect.top;
+                windowElement.style.zIndex = ++zIndexCounter;
+
+                const handleMouseMove = (moveEvent) => {
+                    if (!draggedWindow) return;
+                    let x = moveEvent.clientX - dragOffset.x;
+                    let y = moveEvent.clientY - dragOffset.y;
+                    x = Math.max(0, Math.min(x, window.innerWidth - 100));
+                    y = Math.max(0, Math.min(y, window.innerHeight - 100));
+                    draggedWindow.style.left = x + 'px';
+                    draggedWindow.style.top = y + 'px';
+                };
+
+                const handleMouseUp = () => {
+                    draggedWindow = null;
+                    document.removeEventListener('mousemove', handleMouseMove);
+                    document.removeEventListener('mouseup', handleMouseUp);
+                };
+
+                document.addEventListener('mousemove', handleMouseMove);
+                document.addEventListener('mouseup', handleMouseUp);
             });
-            
+
+            closeBtn.addEventListener('click', () => {
+                windowElement.remove();
+                delete openWindows[app.id];
+                removeFromTaskbar(app.id);
+            });
+
+            fullscreenBtn.addEventListener('click', () => {
+                windowElement.classList.toggle('fullscreen');
+            });
+
             windowElement.addEventListener('mousedown', () => {
                 windowElement.style.zIndex = ++zIndexCounter;
             });
-        }
 
-        // 8. Système de déplacement
-        function startDrag(e) {
-            if (e.target.classList.contains('window-btn')) return;
-            
-            isDragging = true;
-            currentDragElement = e.currentTarget.parentElement;
-            currentDragElement.style.zIndex = ++zIndexCounter;
-            
-            const rect = currentDragElement.getBoundingClientRect();
-            dragOffset.x = e.clientX - rect.left;
-            dragOffset.y = e.clientY - rect.top;
-            
-            document.addEventListener('mousemove', onDrag);
-            document.addEventListener('mouseup', stopDrag);
-            
-            e.preventDefault();
-        }
-
-        function onDrag(e) {
-            if (!isDragging || !currentDragElement) return;
-            
-            const x = e.clientX - dragOffset.x;
-            const y = e.clientY - dragOffset.y;
-            
-            const maxX = window.innerWidth - currentDragElement.offsetWidth;
-            const maxY = window.innerHeight - currentDragElement.offsetHeight;
-            
-            currentDragElement.style.left = `${Math.max(0, Math.min(x, maxX))}px`;
-            currentDragElement.style.top = `${Math.max(0, Math.min(y, maxY))}px`;
-        }
-
-        function stopDrag() {
-            isDragging = false;
-            currentDragElement = null;
-            document.removeEventListener('mousemove', onDrag);
-            document.removeEventListener('mouseup', stopDrag);
-        }
-
-        // 9. Fonctions utilitaires pour les fenêtres
-        function closeWindow(appId) {
-            const windowIndex = openWindows.findIndex(w => w.id === appId);
-            if (windowIndex > -1) {
-                const windowElement = openWindows[windowIndex].element;
-                windowElement.classList.add('window-closing');
-                
-                setTimeout(() => {
-                    document.body.removeChild(windowElement);
-                    openWindows.splice(windowIndex, 1);
-                    removeFromTaskbar(appId);
-                }, 300);
-                
-                playSound('sfx-hover');
+            if (app.id === 'musique') {
+                const profileBtn = windowElement.querySelector('.retro-link:not(.launch-project-btn)');
+                if (profileBtn) {
+                    const menu = profileBtn.nextElementSibling;
+                    profileBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+                    });
+                }
             }
         }
 
-        function toggleFullscreen(windowElement) {
-            windowElement.classList.toggle('fullscreen');
-            playSound('sfx-hover');
-        }
-
-        // 10. Gestion de la barre des tâches
         function addToTaskbar(app) {
-            const taskbarItem = document.createElement('div');
-            taskbarItem.className = 'taskbar-item';
-            taskbarItem.textContent = app.title;
-            taskbarItem.dataset.appId = app.id;
-            
-            taskbarItem.addEventListener('click', () => {
-                const windowElement = document.getElementById(`window-${app.id}`);
-                if (windowElement) {
-                    windowElement.style.zIndex = ++zIndexCounter;
-                    windowElement.classList.remove('window-opening');
-                    void windowElement.offsetWidth;
-                    windowElement.classList.add('window-opening');
-                    
-                    document.querySelectorAll('.taskbar-item').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                    taskbarItem.classList.add('active');
+            const item = document.createElement('div');
+            item.className = 'taskbar-item';
+            item.textContent = app.title;
+            item.dataset.appId = app.id;
+            item.addEventListener('click', () => {
+                const w = openWindows[app.id];
+                if (w) {
+                    w.style.zIndex = ++zIndexCounter;
+                    document.querySelectorAll('.taskbar-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
                 }
             });
-            
-            taskbarItems.appendChild(taskbarItem);
+            taskbarItems.appendChild(item);
         }
 
         function removeFromTaskbar(appId) {
-            const taskbarItem = document.querySelector(`.taskbar-item[data-app-id="${appId}"]`);
-            if (taskbarItem) {
-                taskbarItems.removeChild(taskbarItem);
-            }
+            const items = taskbarItems.querySelectorAll('.taskbar-item');
+            items.forEach(item => {
+                if (item.dataset.appId === appId) item.remove();
+            });
         }
 
-        // 11. Horloge numérique
         function updateClock() {
             const now = new Date();
-            const timeString = now.toLocaleTimeString('fr-FR', { 
-                hour12: false,
+            clock.textContent = now.toLocaleTimeString('fr-FR', { 
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit'
             });
-            clock.textContent = timeString;
         }
 
-        // 12. Effets sonores
-        function playSound(soundId) {
-            const sound = document.getElementById(soundId);
-            if (sound) {
-                sound.currentTime = 0;
-                sound.play().catch(e => console.log('Audio play failed:', e));
-            }
-        }
-
-        // 13. Système de particules
         function createParticles() {
-            const particleCount = 200;
-            
-            for (let i = 0; i < particleCount; i++) {
-                createParticle();
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = (Math.random() * 3) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.opacity = Math.random() * 0.5 + 0.5;
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particlesContainer.appendChild(particle);
             }
         }
 
-        function createParticle() {
-            const particle = document.createElement('div');
-            const sizes = ['small', 'medium', 'large'];
-            const sizeClass = sizes[Math.floor(Math.random() * sizes.length)];
-            
-            particle.className = `particle ${sizeClass}`;
-            
-            const startX = Math.random() * window.innerWidth;
-            const duration = Math.random() * 15 + 10;
-            const delay = Math.random() * 10;
-            
-            particle.style.left = `${startX}px`;
-            particle.style.animationDuration = `${duration}s`;
-            particle.style.animationDelay = `${delay}s`;
-            
-            particlesContainer.appendChild(particle);
-            
-            setTimeout(() => {
-                if (particle.parentNode === particlesContainer) {
-                    particlesContainer.removeChild(particle);
-                    createParticle();
-                }
-            }, (duration + delay) * 1000);
-        }
-
-        // 14. Création d'étoiles fixes
         function createStars() {
+            const starsContainer = document.getElementById('stars-container');
             const starCount = 150;
             
             for (let i = 0; i < starCount; i++) {
@@ -1469,392 +910,331 @@
             }
         }
 
-        // 15. Gestion des paramètres
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ces éléments seront disponibles après le chargement
-            setTimeout(() => {
-                const crtEffect = document.getElementById('crt-effect');
-                const particles = document.getElementById('particles');
-                const musicVolume = document.getElementById('music-volume');
-                const playBtn = document.getElementById('play-btn');
-                const pauseBtn = document.getElementById('pause-btn');
-                const resetBtn = document.getElementById('reset-btn');
-                
-                if (crtEffect) {
-                    crtEffect.addEventListener('change', function(e) {
-                        const crtElements = document.querySelectorAll('.crt-overlay, .crt-effect, .scanlines');
-                        crtElements.forEach(el => {
-                            el.style.display = e.target.checked ? 'block' : 'none';
-                        });
-                    });
-                }
-                
-                if (particles) {
-                    particles.addEventListener('change', function(e) {
-                        particlesContainer.style.display = e.target.checked ? 'block' : 'none';
-                    });
-                }
-                
-                if (musicVolume) {
-                    musicVolume.addEventListener('input', function(e) {
-                        const bgMusic = document.getElementById('bg-music');
-                        if (bgMusic) bgMusic.volume = e.target.value / 100;
-                    });
-                }
-                
-                if (playBtn) {
-                    playBtn.addEventListener('click', function() {
-                        const bgMusic = document.getElementById('bg-music');
-                        if (bgMusic) bgMusic.play();
-                    });
-                }
-                
-                if (pauseBtn) {
-                    pauseBtn.addEventListener('click', function() {
-                        const bgMusic = document.getElementById('bg-music');
-                        if (bgMusic) bgMusic.pause();
-                    });
-                }
-                
-                if (resetBtn) {
-                    resetBtn.addEventListener('click', function() {
-                        if (confirm('Redémarrer le système?')) {
-                            location.reload();
-                        }
-                    });
-                }
-            }, 1000);
-        });
-
-        // 16. Redimensionnement responsive
-        window.addEventListener('resize', function() {
-            starsContainer.innerHTML = '';
-            particlesContainer.innerHTML = '';
-            createStars();
-            createParticles();
-        });
-
-        // 17. Empêcher le menu contextuel
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        // === PROJET "SOUS LE FLUX" ===
-        
-        // Fonction pour lancer le projet "Sous le Flux"
         function launchSousLeFlux() {
             const projectWindow = document.createElement('div');
-            projectWindow.className = 'content-window window-opening';
+            projectWindow.className = 'content-window';
             projectWindow.id = 'window-sous-le-flux';
+            projectWindow.style.zIndex = ++zIndexCounter;
+            projectWindow.style.width = '98%';
+            projectWindow.style.height = '95%';
+            projectWindow.style.left = '1%';
+            projectWindow.style.top = '1%';
+            
+            projectWindow.innerHTML = `
+                <div class="window-header">
+                    <h3 class="window-title">SOUS LE FLUX - Video Mapping</h3>
+                    <div class="window-controls">
+                        <button class="window-btn close-btn">✕</button>
+                    </div>
+                </div>
+                <div class="window-content" style="padding: 0; overflow: hidden;">
+                    <div id="sous-le-flux-container" style="width: 100%; height: 100%; position: relative; background: #000;">
+                        <canvas id="sous-le-flux-canvas" style="display: block; width: 100%; height: 100%;"></canvas>
+                    </div>
+                </div>
+            `;
+            
+            windowsContainer.appendChild(projectWindow);
+            
+            const closeBtn = projectWindow.querySelector('.close-btn');
+            closeBtn.addEventListener('click', () => {
+                if (window.sousLeFluxScene && window.sousLeFluxScene.renderer) {
+                    window.sousLeFluxScene.renderer.dispose();
+                }
+                projectWindow.remove();
+            });
+            
+            initSousLeFlux();
+        }
+
+        function initSousLeFlux() {
+            const container = document.getElementById('sous-le-flux-container');
+            const canvas = document.getElementById('sous-le-flux-canvas');
+            if (!container || !canvas) return;
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 30, 0);
+            camera.lookAt(0, 0, 0);
+            
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            
+            const continents = [
+                [[-20, 12], [-18, 14], [-16, 15], [-14, 14], [-12, 12], [-14, 10], [-16, 8], [-18, 6], [-20, 8], [-22, 10]],
+                [[-16, -2], [-14, 0], [-12, -2], [-14, -6], [-16, -10], [-18, -8], [-18, -4]],
+                [[-4, 14], [-2, 16], [0, 16], [2, 15], [4, 13], [2, 12], [0, 12], [-2, 13]],
+                [[-2, 8], [0, 6], [2, 4], [4, 2], [6, 0], [4, -4], [2, -8], [0, -6], [-2, -2], [-2, 4]],
+                [[6, 16], [10, 18], [14, 18], [18, 16], [20, 14], [18, 12], [16, 10], [14, 8], [12, 10], [10, 12], [8, 14]],
+                [[16, -6], [18, -4], [20, -6], [18, -8], [16, -8]]
+            ];
+            
+            continents.forEach(continent => {
+                const points = continent.map(([x, z]) => new THREE.Vector3(x, 0.01, z));
+                points.push(points[0]);
+                const geom = new THREE.BufferGeometry().setFromPoints(points);
+                const mat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 });
+                scene.add(new THREE.Line(geom, mat));
+            });
+            
+            const nodes = [
+                { x: -18, z: 12 }, { x: -22, z: 8 }, { x: -14, z: 10 }, { x: -16, z: -6 },
+                { x: 0, z: 14 }, { x: 2, z: 13 }, { x: 4, z: 12 }, { x: 2, z: -2 },
+                { x: 4, z: 2 }, { x: 10, z: 16 }, { x: 14, z: 10 }, { x: 16, z: 14 },
+                { x: 18, z: 12 }, { x: 12, z: 12 }, { x: 18, z: -6 }
+            ];
+            
+            const nodeGeom = new THREE.CircleGeometry(0.2, 16);
+            const nodeMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 });
+            nodes.forEach(n => {
+                const mesh = new THREE.Mesh(nodeGeom, nodeMat.clone());
+                mesh.position.set(n.x, 0.02, n.z);
+                mesh.rotation.x = -Math.PI / 2;
+                scene.add(mesh);
+            });
+            
+            const connections = [
+                [0, 1], [0, 2], [1, 2], [0, 4], [1, 11], [4, 5], [5, 6], [4, 6],
+                [0, 3], [3, 7], [6, 9], [9, 10], [10, 11], [11, 12], [12, 13],
+                [13, 14], [11, 14], [4, 7], [6, 8], [10, 12]
+            ];
+            
+            connections.forEach(([i, j]) => {
+                const geom = new THREE.BufferGeometry().setFromPoints([
+                    new THREE.Vector3(nodes[i].x, 0.01, nodes[i].z),
+                    new THREE.Vector3(nodes[j].x, 0.01, nodes[j].z)
+                ]);
+                const mat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.15 });
+                scene.add(new THREE.Line(geom, mat));
+            });
+            
+            class DataPacket {
+                constructor() {
+                    this.selectRoute();
+                    const geom = new THREE.SphereGeometry(0.06, 8, 8);
+                    const mat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 1 });
+                    this.mesh = new THREE.Mesh(geom, mat);
+                    scene.add(this.mesh);
+                }
+                selectRoute() {
+                    const [startIdx, endIdx] = connections[Math.floor(Math.random() * connections.length)];
+                    this.start = new THREE.Vector3(nodes[startIdx].x, 0.1, nodes[startIdx].z);
+                    this.end = new THREE.Vector3(nodes[endIdx].x, 0.1, nodes[endIdx].z);
+                    this.progress = 0;
+                    this.speed = 0.004 + Math.random() * 0.006;
+                }
+                update() {
+                    this.progress += this.speed;
+                    if (this.progress >= 1) this.selectRoute();
+                    const t = this.progress;
+                    const x = this.start.x + (this.end.x - this.start.x) * t;
+                    const z = this.start.z + (this.end.z - this.start.z) * t;
+                    this.mesh.position.set(x, 0.1, z);
+                    this.mesh.material.opacity = Math.sin(t * Math.PI) * 0.9 + 0.1;
+                }
+            }
+            
+            const packets = [];
+            for (let i = 0; i < 150; i++) packets.push(new DataPacket());
+            
+            const animate = () => {
+                requestAnimationFrame(animate);
+                packets.forEach(p => p.update());
+                renderer.render(scene, camera);
+            };
+            
+            window.sousLeFluxScene = { renderer, scene, camera };
+            animate();
+        }
+
+        function launchLectureTerminal() {
+            const projectWindow = document.createElement('div');
+            projectWindow.className = 'content-window';
+            projectWindow.id = 'window-lecture-terminal';
+            projectWindow.style.zIndex = ++zIndexCounter;
+            projectWindow.style.width = '98%';
+            projectWindow.style.height = '95%';
+            projectWindow.style.left = '1%';
+            projectWindow.style.top = '1%';
+            
+            projectWindow.innerHTML = `
+                <div class="window-header">
+                    <h3 class="window-title">LECTEUR // TERMINAL</h3>
+                    <div class="window-controls">
+                        <button class="window-btn close-btn">✕</button>
+                    </div>
+                </div>
+                <div class="window-content" style="padding: 0; overflow: hidden;">
+                    <div id="terminal-display"></div>
+                </div>
+            `;
+            
+            windowsContainer.appendChild(projectWindow);
+            
+            const closeBtn = projectWindow.querySelector('.close-btn');
+            closeBtn.addEventListener('click', () => {
+                projectWindow.remove();
+            });
+            
+            initTerminal();
+        }
+
+        function initTerminal() {
+            const lines = [
+                ">>> LECTURE DU FICHIER cc-index-table.paths ...",
+                "[OK] Connexion à l'archive Common Crawl",
+                "[INFO] Lecture en cours...",
+                "https://example.com/",
+                "https://news.example.org/article/1",
+                "https://cdn.images.net/data/2021/10/asset.png",
+                "https://video.example.com/watch?v=94kd",
+                "https://api.server.net/query?id=8237",
+                "https://example.com/contact",
+                "https://sub.domain.tld/path/file.html",
+                "[INFO] Lecture 10/10 terminée.",
+                "[FIN] Traitement terminé avec succès."
+            ];
+
+            const terminal = document.getElementById('terminal-display');
+            if (!terminal) return;
+
+            let index = 0;
+
+            function printLine() {
+                if (index >= lines.length) {
+                    setTimeout(() => {
+                        const fake = "https://" + Math.random().toString(36).slice(2, 8) + ".example.com/" + Math.random().toString(36).slice(2, 5);
+                        const line = document.createElement("div");
+                        line.className = "terminal-line";
+                        line.textContent = fake;
+                        terminal.appendChild(line);
+                        terminal.scrollTop = terminal.scrollHeight;
+                        if (terminal.children.length > 100) terminal.removeChild(terminal.firstChild);
+                        printLine();
+                    }, 120);
+                    return;
+                }
+
+                const line = document.createElement("div");
+                line.className = "terminal-line";
+                line.textContent = lines[index];
+                terminal.appendChild(line);
+                terminal.scrollTop = terminal.scrollHeight;
+                index++;
+
+                const delay = Math.random() * 200 + 100;
+                setTimeout(printLine, delay);
+            }
+
+            setTimeout(printLine, 600);
+        }
+
+        function launchMusicPlayer() {
+            const projectWindow = document.createElement('div');
+            projectWindow.className = 'content-window';
+            projectWindow.id = 'window-music-player';
             projectWindow.style.zIndex = ++zIndexCounter;
             projectWindow.style.width = '95%';
             projectWindow.style.height = '90%';
             projectWindow.style.left = '2.5%';
             projectWindow.style.top = '2.5%';
             
+            let tracksHtml = musicTracks.map((track, index) => 
+                `<div class="track-item" data-url="${track.url}" data-index="${index}">${track.title}</div>`
+            ).join('');
+            
             projectWindow.innerHTML = `
                 <div class="window-header">
-                    <h3 class="window-title">SOUS LE FLUX - Video Mapping Projection</h3>
+                    <h3 class="window-title">LECTEUR AUDIO - PROJET ARTISTIQUE</h3>
                     <div class="window-controls">
-                        <button class="window-btn fullscreen-btn" title="Plein écran">⛶</button>
-                        <button class="window-btn close-btn" title="Fermer">✕</button>
+                        <button class="window-btn close-btn">✕</button>
                     </div>
                 </div>
-                <div class="window-content" style="padding: 0; height: calc(100% - 60px); overflow: hidden;">
-                    <div id="sous-le-flux-container" style="width: 100%; height: 100%; position: relative; background: #000;">
-                        <div id="sous-le-flux-title" style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); color: #ffffff; font-family: Arial, sans-serif; font-size: 18px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; opacity: 0.9; z-index: 10; pointer-events: none;">Sous le Flux</div>
-                        <canvas id="sous-le-flux-canvas" style="display: block; width: 100%; height: 100%;"></canvas>
+                <div class="window-content" style="padding: 20px; text-align: center;">
+                    <div style="background: linear-gradient(135deg, #0a0a1a 0%, #1a2a1a 100%); border: 3px solid var(--accent-green); padding: 25px; margin-bottom: 20px;">
+                        <h4 style="color: var(--accent-green); margin-bottom: 15px; font-size: 0.8rem;">SONORITÉS CALMES & JAZZ NUMÉRIQUE</h4>
+                        <div style="display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 180px; text-align: left;">
+                                <div style="font-size: 0.65rem; color: var(--accent-yellow); margin-bottom: 8px;">À PROPOS</div>
+                                <div style="font-size: 0.55rem; line-height: 1.4;">
+                                    Exploration des sonorités douces et délicates, mêlant influences jazz et esthétiques numériques. Approche contemplative.
+                                </div>
+                            </div>
+                            <div style="flex: 1; min-width: 180px; text-align: left;">
+                                <div style="font-size: 0.65rem; color: var(--accent-yellow); margin-bottom: 8px;">DISTRIBUTION</div>
+                                <div style="font-size: 0.55rem; line-height: 1.4;">
+                                    • YouTube<br>
+                                    • Spotify<br>
+                                    • Apple Music<br>
+                                    • Toutes plateformes
+                                </div>
+                            </div>
+                        </div>
+                        <div class="music-visualizer" id="music-visualizer">
+                            ${Array.from({length: 20}, (_, i) => 
+                                `<div class="music-bar" style="animation-delay: ${i * 0.05}s;"></div>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px; position: relative; display: inline-block;">
+                        <button id="music-profile-btn" class="retro-link" style="font-size: 0.65rem; padding: 8px 15px; background-color: rgba(0, 255, 102, 0.15); border-color: var(--accent-green); cursor: pointer;">PROFIL MUSICAL</button>
+                        <div id="music-profile-menu" style="display: none; position: absolute; top: 100%; left: 0; background: rgba(20, 20, 40, 0.98); border: 2px solid var(--accent-green); z-index: 10000; min-width: 200px; margin-top: 5px; box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);">
+                            <a href="https://music.apple.com/fr/album/lf/1833155912" target="_blank" style="display: block; padding: 10px 15px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.6rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🍎 Apple Music</a>
+                            <a href="https://open.spotify.com/intl-fr/artist/0oxQsg9xEMZMl3iZHiZlBq" target="_blank" style="display: block; padding: 10px 15px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.6rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🎵 Spotify</a>
+                            <a href="https://www.youtube.com/channel/UCH17Gl2MRr9D3kB54iBPtvg" target="_blank" style="display: block; padding: 10px 15px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.6rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">▶ YouTube</a>
+                            <a href="https://www.qobuz.com/ca-fr/album/lf-arthur-cieux/luph0y3jjm1qb" target="_blank" style="display: block; padding: 10px 15px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.6rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">♫ Qobuz</a>
+                            <a href="https://music.amazon.in/artists/B0DXQ4C37T/arthur-cieux" target="_blank" style="display: block; padding: 10px 15px; color: var(--accent-yellow); text-decoration: none; font-size: 0.6rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🎧 Amazon Music</a>
+                        </div>
+                    </div>
+                    
+                    <div style="font-size: 0.65rem; color: var(--accent-blue); margin-bottom: 10px;">20 COMPOSITIONS DISPONIBLES</div>
+                    <div class="track-list">
+                        ${tracksHtml}
                     </div>
                 </div>
             `;
             
-            document.body.appendChild(projectWindow);
-            
-            initSousLeFlux();
+            windowsContainer.appendChild(projectWindow);
             
             const closeBtn = projectWindow.querySelector('.close-btn');
-            const fullscreenBtn = projectWindow.querySelector('.fullscreen-btn');
-            
             closeBtn.addEventListener('click', () => {
-                if (window.sousLeFluxScene) {
-                    const renderer = window.sousLeFluxScene.renderer;
-                    if (renderer) {
-                        renderer.dispose();
-                    }
-                    if (window.sousLeFluxResizeObserver) {
-                        window.sousLeFluxResizeObserver.disconnect();
-                    }
-                    window.sousLeFluxActive = false;
-                }
-                projectWindow.classList.add('window-closing');
-                setTimeout(() => {
-                    document.body.removeChild(projectWindow);
-                }, 300);
+                projectWindow.remove();
             });
             
-            fullscreenBtn.addEventListener('click', () => {
-                projectWindow.classList.toggle('fullscreen');
-                if (window.sousLeFluxScene && window.sousLeFluxScene.renderer && window.sousLeFluxScene.camera) {
-                    const container = document.getElementById('sous-le-flux-container');
-                    const width = container.clientWidth;
-                    const height = container.clientHeight;
-                    
-                    window.sousLeFluxScene.camera.aspect = width / height;
-                    window.sousLeFluxScene.camera.updateProjectionMatrix();
-                    window.sousLeFluxScene.renderer.setSize(width, height);
-                }
-            });
-            
-            playSound('sfx-confirm');
-        }
-
-        // Initialisation du projet "Sous le Flux"
-        function initSousLeFlux() {
-            const container = document.getElementById('sous-le-flux-container');
-            const canvas = document.getElementById('sous-le-flux-canvas');
-            
-            if (!container || !canvas) return;
-            
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x000000);
-            
-            const camera = new THREE.PerspectiveCamera(
-                60,
-                container.clientWidth / container.clientHeight,
-                0.1,
-                1000
-            );
-            camera.position.set(0, 30, 0);
-            camera.lookAt(0, 0, 0);
-
-            const renderer = new THREE.WebGLRenderer({ 
-                canvas: canvas,
-                antialias: true 
-            });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-
-            // Continental outlines
-            const continents = [
-                // North America
-                [
-                    [-20, 12], [-18, 14], [-16, 15], [-14, 14], [-12, 12],
-                    [-14, 10], [-16, 8], [-18, 6], [-20, 8], [-22, 10]
-                ],
-                // South America
-                [
-                    [-16, -2], [-14, 0], [-12, -2], [-14, -6], [-16, -10],
-                    [-18, -8], [-18, -4]
-                ],
-                // Europe
-                [
-                    [-4, 14], [-2, 16], [0, 16], [2, 15], [4, 13],
-                    [2, 12], [0, 12], [-2, 13]
-                ],
-                // Africa
-                [
-                    [-2, 8], [0, 6], [2, 4], [4, 2], [6, 0], [4, -4],
-                    [2, -8], [0, -6], [-2, -2], [-2, 4]
-                ],
-                // Asia
-                [
-                    [6, 16], [10, 18], [14, 18], [18, 16], [20, 14],
-                    [18, 12], [16, 10], [14, 8], [12, 10], [10, 12], [8, 14]
-                ],
-                // Oceania
-                [
-                    [16, -6], [18, -4], [20, -6], [18, -8], [16, -8]
-                ]
-            ];
-
-            continents.forEach(continent => {
-                const points = continent.map(([x, z]) => new THREE.Vector3(x, 0.01, z));
-                points.push(points[0]);
-                
-                const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-                const lineMaterial = new THREE.LineBasicMaterial({
-                    color: 0xffffff,
-                    transparent: true,
-                    opacity: 0.3
+            const trackItems = projectWindow.querySelectorAll('.track-item');
+            trackItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const url = item.getAttribute('data-url');
+                    window.open(url, '_blank');
+                    trackItems.forEach(i => i.style.background = '');
+                    item.style.background = 'rgba(0, 255, 102, 0.3)';
                 });
-                const line = new THREE.Line(lineGeometry, lineMaterial);
-                scene.add(line);
             });
 
-            // Major connection nodes
-            const nodes = [
-                { x: -18, z: 12, name: 'New York' },
-                { x: -22, z: 8, name: 'San Francisco' },
-                { x: -14, z: 10, name: 'Chicago' },
-                { x: -16, z: -6, name: 'São Paulo' },
-                { x: 0, z: 14, name: 'London' },
-                { x: 2, z: 13, name: 'Paris' },
-                { x: 4, z: 12, name: 'Frankfurt' },
-                { x: 2, z: -2, name: 'Lagos' },
-                { x: 4, z: 2, name: 'Nairobi' },
-                { x: 10, z: 16, name: 'Moscow' },
-                { x: 14, z: 10, name: 'Mumbai' },
-                { x: 16, z: 14, name: 'Tokyo' },
-                { x: 18, z: 12, name: 'Shanghai' },
-                { x: 12, z: 12, name: 'Singapore' },
-                { x: 18, z: -6, name: 'Sydney' }
-            ];
-
-            const nodeGeometry = new THREE.CircleGeometry(0.2, 16);
-            const nodeMaterial = new THREE.MeshBasicMaterial({
-                color: 0xffffff,
-                transparent: true,
-                opacity: 0.8
-            });
-
-            nodes.forEach(nodeData => {
-                const node = new THREE.Mesh(nodeGeometry, nodeMaterial.clone());
-                node.position.set(nodeData.x, 0.02, nodeData.z);
-                node.rotation.x = -Math.PI / 2;
-                scene.add(node);
-            });
-
-            // Connection lines
-            const connectionsMap = [
-                [0, 1], [0, 2], [1, 2],
-                [0, 4], [1, 11],
-                [4, 5], [5, 6], [4, 6],
-                [0, 3], [3, 7],
-                [6, 9], [9, 10],
-                [10, 11], [11, 12], [12, 13],
-                [13, 14], [11, 14],
-                [4, 7], [6, 8], [10, 12]
-            ];
-
-            connectionsMap.forEach(([i, j]) => {
-                const start = nodes[i];
-                const end = nodes[j];
-                
-                const lineGeometry = new THREE.BufferGeometry().setFromPoints([
-                    new THREE.Vector3(start.x, 0.01, start.z),
-                    new THREE.Vector3(end.x, 0.01, end.z)
-                ]);
-                
-                const lineMaterial = new THREE.LineBasicMaterial({
-                    color: 0xffffff,
-                    transparent: true,
-                    opacity: 0.15
-                });
-                
-                const line = new THREE.Line(lineGeometry, lineMaterial);
-                scene.add(line);
-            });
-
-            // Data packets
-            class DataPacket {
-                constructor() {
-                    this.selectRoute();
-                    
-                    const geometry = new THREE.SphereGeometry(0.06, 8, 8);
-                    const material = new THREE.MeshBasicMaterial({
-                        color: 0xffffff,
-                        transparent: true,
-                        opacity: 1
-                    });
-                    this.mesh = new THREE.Mesh(geometry, material);
-                    scene.add(this.mesh);
-                }
-
-                selectRoute() {
-                    const routeIndex = Math.floor(Math.random() * connectionsMap.length);
-                    const [startIdx, endIdx] = connectionsMap[routeIndex];
-                    
-                    const startNode = nodes[startIdx];
-                    const endNode = nodes[endIdx];
-                    
-                    this.start = new THREE.Vector3(startNode.x, 0.1, startNode.z);
-                    this.end = new THREE.Vector3(endNode.x, 0.1, endNode.z);
-                    
-                    this.progress = 0;
-                    this.speed = 0.004 + Math.random() * 0.006;
-                }
-
-                update() {
-                    this.progress += this.speed;
-                    
-                    if (this.progress >= 1) {
-                        this.selectRoute();
+            const profileBtn = projectWindow.querySelector('#music-profile-btn');
+            if (profileBtn) {
+                const profileMenu = profileBtn.parentElement.querySelector('div[style*="display: none"]');
+                profileBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (profileMenu) {
+                        profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
                     }
-
-                    const t = this.progress;
-                    const x = this.start.x + (this.end.x - this.start.x) * t;
-                    const z = this.start.z + (this.end.z - this.start.z) * t;
-                    
-                    this.mesh.position.set(x, 0.1, z);
-                    
-                    const fade = Math.sin(t * Math.PI);
-                    this.mesh.material.opacity = fade * 0.9 + 0.1;
-                }
-            }
-
-            const packets = [];
-            const packetCount = 150;
-            
-            for (let i = 0; i < packetCount; i++) {
-                packets.push(new DataPacket());
-            }
-
-            const animate = () => {
-                if (!window.sousLeFluxActive) return;
-                
-                requestAnimationFrame(animate);
-                packets.forEach(packet => packet.update());
-                renderer.render(scene, camera);
-            };
-
-            window.sousLeFluxScene = {
-                scene: scene,
-                camera: camera,
-                renderer: renderer,
-                packets: packets
-            };
-            window.sousLeFluxActive = true;
-            
-            animate();
-
-            const handleResize = () => {
-                const width = container.clientWidth;
-                const height = container.clientHeight;
-                
-                camera.aspect = width / height;
-                camera.updateProjectionMatrix();
-                renderer.setSize(width, height);
-            };
-            
-            const resizeObserver = new ResizeObserver(handleResize);
-            resizeObserver.observe(container);
-            window.sousLeFluxResizeObserver = resizeObserver;
-        }
-
-        // Fonction pour configurer les liens du projet Sous le Flux
-        function setupSousLeFluxLinks() {
-            const launchBtns = document.querySelectorAll('.launch-project-btn');
-            const previewDiv = document.getElementById('floor-projector');
-            
-            launchBtns.forEach(btn => {
-                btn.addEventListener('click', launchSousLeFlux);
-            });
-            
-            if (previewDiv) {
-                previewDiv.addEventListener('click', launchSousLeFlux);
+                });
             }
         }
 
-        // Configuration initiale
-        document.addEventListener('DOMContentLoaded', function() {
-            // Configuration de la barre des tâches
-            const taskParametres = document.getElementById('task-parametres');
-            if (taskParametres) {
-                taskParametres.addEventListener('click', function() {
-                    const settingsApp = applications.find(app => app.id === 'parametres');
-                    if (settingsApp) {
-                        openWindow(settingsApp);
-                    }
-                });
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('launch-project-btn')) {
+                e.preventDefault();
+                const project = e.target.dataset.project;
+                if (project === 'sous-le-flux') {
+                    launchSousLeFlux();
+                } else if (project === 'lecture-terminal') {
+                    launchLectureTerminal();
+                } else if (project === 'musique') {
+                    launchMusicPlayer();
+                }
             }
         });
     </script>
