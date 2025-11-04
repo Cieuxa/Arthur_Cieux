@@ -6,7 +6,7 @@
     <title>PixelOS - Portfolio Interactif Rétro</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         /* --- Variables CSS --- */
         :root {
@@ -995,10 +995,10 @@
     <div class="crt-effect"></div>
     <div class="scanlines"></div>
     
-    <!-- NOUVEAU: Particules augmentées -->
+    <!-- Particules augmentées -->
     <div class="particles" id="particles-container"></div>
     
-    <!-- NOUVEAU: Étoiles fixes -->
+    <!-- Étoiles fixes -->
     <div id="stars-container"></div>
 
     <audio id="bg-music" loop>
@@ -1030,36 +1030,14 @@
                 icon: 'icon-installations',
                 content: `
                     <div class="inventory-grid">
-                        <div class="inventory-item">
+                        <div class="inventory-item" style="text-align: center; padding: 40px; border: 2px dashed var(--accent-yellow); background: rgba(255, 204, 0, 0.1);">
                             <div class="icon icon-installations"></div>
                             <div class="item-info">
-                                <h4>Développeur Full Stack</h4>
-                                <div class="item-type">Compétence Principale</div>
-                                <div class="item-desc">Développement d'applications web complètes avec React, Node.js et bases de données.</div>
+                                <h4>SYSTEM READY</h4>
+                                <div class="item-type">Compétences en Chargement</div>
+                                <div class="item-desc">Système prêt à recevoir tes vraies compétences et technologies maîtrisées.</div>
                                 <div class="item-stats">
-                                    <strong>Technologies:</strong> JavaScript, TypeScript, React, Node.js, MongoDB, PostgreSQL
-                                </div>
-                            </div>
-                        </div>
-                        <div class="inventory-item">
-                            <div class="icon icon-projets"></div>
-                            <div class="item-info">
-                                <h4>Designer UI/UX</h4>
-                                <div class="item-type">Spécialisation</div>
-                                <div class="item-desc">Création d'interfaces utilisateur intuitives et d'expériences utilisateur optimisées.</div>
-                                <div class="item-stats">
-                                    <strong>Outils:</strong> Figma, Adobe XD, Photoshop, Illustrator
-                                </div>
-                            </div>
-                        </div>
-                        <div class="inventory-item">
-                            <div class="icon icon-about"></div>
-                            <div class="item-info">
-                                <h4>DevOps & Infrastructure</h4>
-                                <div class="item-type">Expertise Technique</div>
-                                <div class="item-desc">Déploiement, monitoring et optimisation d'infrastructures cloud.</div>
-                                <div class="item-stats">
-                                    <strong>Environnements:</strong> AWS, Docker, Kubernetes, CI/CD
+                                    <strong>Status:</strong> En attente de données utilisateur
                                 </div>
                             </div>
                         </div>
@@ -1073,45 +1051,75 @@
                 content: `
                     <div class="inventory-grid">
                         <div class="inventory-item">
-                            <div class="icon icon-installations"></div>
-                            <div class="item-info">
-                                <h4>E-commerce Next.js</h4>
-                                <div class="item-type">Projet Full Stack</div>
-                                <div class="item-desc">Plateforme e-commerce avec paiement sécurisé et dashboard admin.</div>
-                                <div class="item-stats">
-                                    <strong>Stack:</strong> Next.js, Stripe, MongoDB, Tailwind<br>
-                                    <a href="#" class="retro-link">Voir le projet</a>
-                                    <a href="#" class="retro-link">Code source</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="inventory-item">
                             <div class="icon icon-projets"></div>
                             <div class="item-info">
-                                <h4>Application Mobile React Native</h4>
-                                <div class="item-type">Projet Mobile</div>
-                                <div class="item-desc">Application de suivi fitness avec synchronisation cloud.</div>
+                                <h4>SOUS LE FLUX</h4>
+                                <div class="item-type">Video Mapping - Projection au Sol</div>
+                                <div class="item-desc">Installation immersive représentant les flux de données mondiaux en temps réel à travers une projection cartographique interactive.</div>
                                 <div class="item-stats">
-                                    <strong>Stack:</strong> React Native, Firebase, Redux<br>
-                                    <a href="#" class="retro-link">Voir le projet</a>
-                                    <a href="#" class="retro-link">Télécharger</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="inventory-item">
-                            <div class="icon icon-about"></div>
-                            <div class="item-info">
-                                <h4>Dashboard Analytics</h4>
-                                <div class="item-type">Projet Data Visualization</div>
-                                <div class="item-desc">Tableau de bord interactif pour analyse de données en temps réel.</div>
-                                <div class="item-stats">
-                                    <strong>Stack:</strong> D3.js, Express, Socket.io<br>
-                                    <a href="#" class="retro-link">Démo live</a>
-                                    <a href="#" class="retro-link">Documentation</a>
+                                    <strong>Technologies:</strong> Three.js, WebGL, Data Visualization<br>
+                                    <strong>Concepts:</strong> Cartographie interactive, Flux réseaux, Visualisation de données<br>
+                                    <div class="project-preview" style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--accent-purple);">
+                                        <div style="text-align: center; color: var(--accent-blue); font-size: 0.6rem; margin-bottom: 5px;">
+                                            🎥 PRÉVISUALISATION IMMERSIVE
+                                        </div>
+                                        <div id="floor-projector" style="width: 100%; height: 150px; background: #000; position: relative; overflow: hidden; border: 2px solid var(--accent-yellow); cursor: pointer;">
+                                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, #0a0a1a 0%, #1a1a3a 100%); display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                                                <div style="color: var(--accent-yellow); font-size: 0.7rem; margin-bottom: 10px;">VIDEO MAPPING - SOUS LE FLUX</div>
+                                                <div style="width: 80%; height: 2px; background: var(--accent-blue); margin: 5px 0;"></div>
+                                                <div style="display: flex; gap: 3px; margin-top: 10px;">
+                                                    <div style="width: 4px; height: 4px; background: var(--accent-yellow); animation: blink 1s infinite;"></div>
+                                                    <div style="width: 4px; height: 4px; background: var(--accent-blue); animation: blink 1s infinite 0.2s;"></div>
+                                                    <div style="width: 4px; height: 4px; background: var(--accent-purple); animation: blink 1s infinite 0.4s;"></div>
+                                                </div>
+                                                <div style="color: var(--primary-text); font-size: 0.5rem; margin-top: 15px; opacity: 0.7;">
+                                                    [CLIQUEZ POUR DÉMARRER LA PROJECTION]
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 10px;">
+                                        <a href="javascript:void(0)" class="retro-link" id="launch-sous-le-flux-btn">Lancer le projet complet</a>
+                                        <a href="javascript:void(0)" class="retro-link">Voir le code source</a>
+                                        <a href="javascript:void(0)" class="retro-link">Documentation technique</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
+                    <style>
+                        @keyframes blink {
+                            0%, 100% { opacity: 0.2; }
+                            50% { opacity: 1; }
+                        }
+                        
+                        #floor-projector {
+                            transition: all 0.3s;
+                        }
+                        
+                        #floor-projector:hover {
+                            box-shadow: 0 0 20px var(--accent-blue);
+                            transform: scale(1.02);
+                        }
+                        
+                        .project-preview {
+                            position: relative;
+                            overflow: hidden;
+                        }
+                        
+                        .project-preview::before {
+                            content: '';
+                            position: absolute;
+                            top: -50%;
+                            left: -50%;
+                            width: 200%;
+                            height: 200%;
+                            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+                            transform: rotate(45deg);
+                            animation: shine 3s infinite;
+                        }
+                    </style>
                 `
             },
             {
@@ -1249,7 +1257,7 @@
             if (existingWindow) {
                 existingWindow.style.zIndex = ++zIndexCounter;
                 existingWindow.classList.remove('window-opening');
-                void existingWindow.offsetWidth; // Trigger reflow
+                void existingWindow.offsetWidth;
                 existingWindow.classList.add('window-opening');
                 return;
             }
@@ -1298,7 +1306,6 @@
             const fullscreenBtn = windowElement.querySelector('.fullscreen-btn');
             const resizeBtn = windowElement.querySelector('.resize-btn');
             
-            // Déplacement en cliquant n'importe où sur le header
             header.addEventListener('mousedown', startDrag);
             
             closeBtn.addEventListener('click', () => closeWindow(app.id));
@@ -1308,13 +1315,12 @@
                 windowElement.style.height = '600px';
             });
             
-            // Focus au clic
             windowElement.addEventListener('mousedown', () => {
                 windowElement.style.zIndex = ++zIndexCounter;
             });
         }
 
-        // 8. Système de déplacement amélioré
+        // 8. Système de déplacement
         function startDrag(e) {
             if (e.target.classList.contains('window-btn')) return;
             
@@ -1338,7 +1344,6 @@
             const x = e.clientX - dragOffset.x;
             const y = e.clientY - dragOffset.y;
             
-            // Limites de l'écran
             const maxX = window.innerWidth - currentDragElement.offsetWidth;
             const maxY = window.innerHeight - currentDragElement.offsetHeight;
             
@@ -1390,7 +1395,6 @@
                     void windowElement.offsetWidth;
                     windowElement.classList.add('window-opening');
                     
-                    // Activer l'élément dans la barre des tâches
                     document.querySelectorAll('.taskbar-item').forEach(item => {
                         item.classList.remove('active');
                     });
@@ -1429,9 +1433,9 @@
             }
         }
 
-        // 13. NOUVEAU: Système de particules AUGMENTÉ
+        // 13. Système de particules
         function createParticles() {
-            const particleCount = 200; // Augmenté de 50 à 200
+            const particleCount = 200;
             
             for (let i = 0; i < particleCount; i++) {
                 createParticle();
@@ -1445,7 +1449,6 @@
             
             particle.className = `particle ${sizeClass}`;
             
-            // Position aléatoire
             const startX = Math.random() * window.innerWidth;
             const duration = Math.random() * 15 + 10;
             const delay = Math.random() * 10;
@@ -1456,7 +1459,6 @@
             
             particlesContainer.appendChild(particle);
             
-            // Recréer la particule après son animation
             setTimeout(() => {
                 if (particle.parentNode === particlesContainer) {
                     particlesContainer.removeChild(particle);
@@ -1465,7 +1467,7 @@
             }, (duration + delay) * 1000);
         }
 
-        // 14. NOUVEAU: Création d'étoiles fixes
+        // 14. Création d'étoiles fixes
         function createStars() {
             const starCount = 150;
             
@@ -1485,7 +1487,6 @@
 
         // 15. Gestion des paramètres
         document.addEventListener('DOMContentLoaded', function() {
-            // Écouteurs pour les paramètres
             document.getElementById('crt-effect').addEventListener('change', function(e) {
                 const crtElements = document.querySelectorAll('.crt-overlay, .crt-effect, .scanlines');
                 crtElements.forEach(el => {
@@ -1501,7 +1502,6 @@
                 document.getElementById('bg-music').volume = e.target.value / 100;
             });
             
-            // Contrôles audio
             document.getElementById('play-btn').addEventListener('click', function() {
                 document.getElementById('bg-music').play();
             });
@@ -1510,7 +1510,6 @@
                 document.getElementById('bg-music').pause();
             });
             
-            // Reset system
             document.getElementById('reset-btn').addEventListener('click', function() {
                 if (confirm('Redémarrer le système?')) {
                     location.reload();
@@ -1520,7 +1519,6 @@
 
         // 16. Redimensionnement responsive
         window.addEventListener('resize', function() {
-            // Recréer les étoiles et particules
             starsContainer.innerHTML = '';
             particlesContainer.innerHTML = '';
             createStars();
@@ -1532,6 +1530,318 @@
             e.preventDefault();
         });
 
+        // === PROJET "SOUS LE FLUX" ===
+        
+        // Fonction pour lancer le projet "Sous le Flux"
+        function launchSousLeFlux() {
+            const projectWindow = document.createElement('div');
+            projectWindow.className = 'content-window window-opening';
+            projectWindow.id = 'window-sous-le-flux';
+            projectWindow.style.zIndex = ++zIndexCounter;
+            projectWindow.style.width = '95%';
+            projectWindow.style.height = '90%';
+            projectWindow.style.left = '2.5%';
+            projectWindow.style.top = '2.5%';
+            
+            projectWindow.innerHTML = `
+                <div class="window-header">
+                    <h3 class="window-title">SOUS LE FLUX - Video Mapping Projection</h3>
+                    <div class="window-controls">
+                        <button class="window-btn fullscreen-btn" title="Plein écran">⛶</button>
+                        <button class="window-btn close-btn" title="Fermer">✕</button>
+                    </div>
+                </div>
+                <div class="window-content" style="padding: 0; height: calc(100% - 60px); overflow: hidden;">
+                    <div id="sous-le-flux-container" style="width: 100%; height: 100%; position: relative; background: #000;">
+                        <div id="sous-le-flux-title" style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); color: #ffffff; font-family: Arial, sans-serif; font-size: 18px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; opacity: 0.9; z-index: 10; pointer-events: none;">Sous le Flux</div>
+                        <canvas id="sous-le-flux-canvas" style="display: block; width: 100%; height: 100%;"></canvas>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(projectWindow);
+            
+            initSousLeFlux();
+            
+            const closeBtn = projectWindow.querySelector('.close-btn');
+            const fullscreenBtn = projectWindow.querySelector('.fullscreen-btn');
+            
+            closeBtn.addEventListener('click', () => {
+                if (window.sousLeFluxScene) {
+                    const renderer = window.sousLeFluxScene.renderer;
+                    if (renderer) {
+                        renderer.dispose();
+                    }
+                }
+                projectWindow.classList.add('window-closing');
+                setTimeout(() => {
+                    document.body.removeChild(projectWindow);
+                }, 300);
+            });
+            
+            fullscreenBtn.addEventListener('click', () => {
+                projectWindow.classList.toggle('fullscreen');
+                if (window.sousLeFluxScene && window.sousLeFluxScene.renderer && window.sousLeFluxScene.camera) {
+                    const container = document.getElementById('sous-le-flux-container');
+                    const width = container.clientWidth;
+                    const height = container.clientHeight;
+                    
+                    window.sousLeFluxScene.camera.aspect = width / height;
+                    window.sousLeFluxScene.camera.updateProjectionMatrix();
+                    window.sousLeFluxScene.renderer.setSize(width, height);
+                }
+            });
+            
+            playSound('sfx-confirm');
+        }
+
+        // Initialisation du projet "Sous le Flux"
+        function initSousLeFlux() {
+            const container = document.getElementById('sous-le-flux-container');
+            const canvas = document.getElementById('sous-le-flux-canvas');
+            
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000);
+            
+            const camera = new THREE.PerspectiveCamera(
+                60,
+                container.clientWidth / container.clientHeight,
+                0.1,
+                1000
+            );
+            camera.position.set(0, 30, 0);
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ 
+                canvas: canvas,
+                antialias: true 
+            });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+
+            // Continental outlines
+            const continents = [
+                // North America
+                [
+                    [-20, 12], [-18, 14], [-16, 15], [-14, 14], [-12, 12],
+                    [-14, 10], [-16, 8], [-18, 6], [-20, 8], [-22, 10]
+                ],
+                // South America
+                [
+                    [-16, -2], [-14, 0], [-12, -2], [-14, -6], [-16, -10],
+                    [-18, -8], [-18, -4]
+                ],
+                // Europe
+                [
+                    [-4, 14], [-2, 16], [0, 16], [2, 15], [4, 13],
+                    [2, 12], [0, 12], [-2, 13]
+                ],
+                // Africa
+                [
+                    [-2, 8], [0, 6], [2, 4], [4, 2], [6, 0], [4, -4],
+                    [2, -8], [0, -6], [-2, -2], [-2, 4]
+                ],
+                // Asia
+                [
+                    [6, 16], [10, 18], [14, 18], [18, 16], [20, 14],
+                    [18, 12], [16, 10], [14, 8], [12, 10], [10, 12], [8, 14]
+                ],
+                // Oceania
+                [
+                    [16, -6], [18, -4], [20, -6], [18, -8], [16, -8]
+                ]
+            ];
+
+            continents.forEach(continent => {
+                const points = continent.map(([x, z]) => new THREE.Vector3(x, 0.01, z));
+                points.push(points[0]);
+                
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+                const lineMaterial = new THREE.LineBasicMaterial({
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                scene.add(line);
+            });
+
+            // Major connection nodes
+            const nodes = [
+                { x: -18, z: 12, name: 'New York' },
+                { x: -22, z: 8, name: 'San Francisco' },
+                { x: -14, z: 10, name: 'Chicago' },
+                { x: -16, z: -6, name: 'São Paulo' },
+                { x: 0, z: 14, name: 'London' },
+                { x: 2, z: 13, name: 'Paris' },
+                { x: 4, z: 12, name: 'Frankfurt' },
+                { x: 2, z: -2, name: 'Lagos' },
+                { x: 4, z: 2, name: 'Nairobi' },
+                { x: 10, z: 16, name: 'Moscow' },
+                { x: 14, z: 10, name: 'Mumbai' },
+                { x: 16, z: 14, name: 'Tokyo' },
+                { x: 18, z: 12, name: 'Shanghai' },
+                { x: 12, z: 12, name: 'Singapore' },
+                { x: 18, z: -6, name: 'Sydney' }
+            ];
+
+            const nodeGeometry = new THREE.CircleGeometry(0.2, 16);
+            const nodeMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            nodes.forEach(nodeData => {
+                const node = new THREE.Mesh(nodeGeometry, nodeMaterial.clone());
+                node.position.set(nodeData.x, 0.02, nodeData.z);
+                node.rotation.x = -Math.PI / 2;
+                scene.add(node);
+            });
+
+            // Connection lines
+            const connectionsMap = [
+                [0, 1], [0, 2], [1, 2],
+                [0, 4], [1, 11],
+                [4, 5], [5, 6], [4, 6],
+                [0, 3], [3, 7],
+                [6, 9], [9, 10],
+                [10, 11], [11, 12], [12, 13],
+                [13, 14], [11, 14],
+                [4, 7], [6, 8], [10, 12]
+            ];
+
+            connectionsMap.forEach(([i, j]) => {
+                const start = nodes[i];
+                const end = nodes[j];
+                
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+                    new THREE.Vector3(start.x, 0.01, start.z),
+                    new THREE.Vector3(end.x, 0.01, end.z)
+                ]);
+                
+                const lineMaterial = new THREE.LineBasicMaterial({
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.15
+                });
+                
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                scene.add(line);
+            });
+
+            // Data packets
+            class DataPacket {
+                constructor() {
+                    this.selectRoute();
+                    
+                    const geometry = new THREE.SphereGeometry(0.06, 8, 8);
+                    const material = new THREE.MeshBasicMaterial({
+                        color: 0xffffff,
+                        transparent: true,
+                        opacity: 1
+                    });
+                    this.mesh = new THREE.Mesh(geometry, material);
+                    scene.add(this.mesh);
+                }
+
+                selectRoute() {
+                    const routeIndex = Math.floor(Math.random() * connectionsMap.length);
+                    const [startIdx, endIdx] = connectionsMap[routeIndex];
+                    
+                    const startNode = nodes[startIdx];
+                    const endNode = nodes[endIdx];
+                    
+                    this.start = new THREE.Vector3(startNode.x, 0.1, startNode.z);
+                    this.end = new THREE.Vector3(endNode.x, 0.1, endNode.z);
+                    
+                    this.progress = 0;
+                    this.speed = 0.004 + Math.random() * 0.006;
+                }
+
+                update() {
+                    this.progress += this.speed;
+                    
+                    if (this.progress >= 1) {
+                        this.selectRoute();
+                    }
+
+                    const t = this.progress;
+                    const x = this.start.x + (this.end.x - this.start.x) * t;
+                    const z = this.start.z + (this.end.z - this.start.z) * t;
+                    
+                    this.mesh.position.set(x, 0.1, z);
+                    
+                    const fade = Math.sin(t * Math.PI);
+                    this.mesh.material.opacity = fade * 0.9 + 0.1;
+                }
+            }
+
+            const packets = [];
+            const packetCount = 150;
+            
+            for (let i = 0; i < packetCount; i++) {
+                packets.push(new DataPacket());
+            }
+
+            const animate = () => {
+                if (!window.sousLeFluxActive) return;
+                
+                requestAnimationFrame(animate);
+                packets.forEach(packet => packet.update());
+                renderer.render(scene, camera);
+            };
+
+            window.sousLeFluxScene = {
+                scene: scene,
+                camera: camera,
+                renderer: renderer,
+                packets: packets
+            };
+            window.sousLeFluxActive = true;
+            
+            animate();
+
+            const handleResize = () => {
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            };
+            
+            const resizeObserver = new ResizeObserver(handleResize);
+            resizeObserver.observe(container);
+            window.sousLeFluxResizeObserver = resizeObserver;
+        }
+
+        // Gestion des événements pour les liens du projet
+        function setupSousLeFluxLinks() {
+            const launchBtn = document.getElementById('launch-sous-le-flux-btn');
+            if (launchBtn) {
+                launchBtn.addEventListener('click', launchSousLeFlux);
+            }
+            
+            const floorProjector = document.getElementById('floor-projector');
+            if (floorProjector) {
+                floorProjector.addEventListener('click', launchSousLeFlux);
+            }
+        }
+
+        // Configurer les liens quand une fenêtre projets s'ouvre
+        const originalOpenWindow = openWindow;
+        openWindow = function(app) {
+            originalOpenWindow(app);
+            
+            if (app.id === 'projets') {
+                setTimeout(setupSousLeFluxLinks, 100);
+            }
+        };
+
+        // Configuration initiale
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(setupSousLeFluxLinks, 1000);
+        });
     </script>
 </body>
 </html>
