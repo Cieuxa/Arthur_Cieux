@@ -3,491 +3,565 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PixelOS - Portfolio Interactif Rétro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>Arthur Cieux - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
-            --primary-bg: #0a0a1a;
-            --primary-text: #e0e0e0;
-            --accent-yellow: #ffcc00;
-            --accent-blue: #00aaff;
-            --accent-purple: #800080;
-            --accent-red: #ff0000;
-            --accent-green: #00FF66;
+            --primary-bg: #fafafa;
+            --primary-dark: #1a1a1a;
+            --accent-pink: #ff006e;
+            --accent-purple: #8338ec;
+            --accent-cyan: #3a86ff;
+            --accent-lime: #06ffa5;
+            --gradient-1: linear-gradient(135deg, #ff006e 0%, #8338ec 100%);
+            --gradient-2: linear-gradient(135deg, #3a86ff 0%, #06ffa5 100%);
         }
-        * { box-sizing: border-box; }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background-color: var(--primary-bg);
-            color: var(--primary-text);
-            font-family: 'Press Start 2P', cursive;
+            color: var(--primary-dark);
+            font-family: 'Inter', sans-serif;
             overflow: hidden;
-            height: 100vh;
-            margin: 0;
             position: relative;
-            font-size: 12px;
-            user-select: none;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect fill="%23ffcc00" width="16" height="16"/><rect fill="%230a0a1a" x="4" y="4" width="8" height="8"/></svg>'), auto;
         }
-        
+
         #start-screen {
-            text-align: center;
-            cursor: pointer;
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
             z-index: 5000;
-            padding: 30px;
-            background: rgba(10, 10, 26, 0.95);
-            border: 4px solid var(--primary-text);
-            box-shadow: 0 0 0 4px var(--primary-bg), 0 0 30px rgba(128, 0, 128, 0.7);
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            cursor: pointer;
+            gap: 40px;
+            padding: 20px;
         }
-        #start-screen:hover {
-            transform: translate(-50%, -50%) scale(1.05);
-            border-color: var(--accent-yellow);
-            box-shadow: 0 0 0 4px var(--primary-bg), 0 0 50px rgba(128, 0, 128, 0.9);
+
+        #start-screen.hidden {
+            display: none;
         }
-        #start-screen h1 {
-            font-size: 1.8rem;
-            color: #d0d0ff;
-            text-shadow: 3px 3px 0px var(--accent-purple);
-            margin: 15px 0;
-            letter-spacing: 2px;
+
+        .boot-screen {
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
         }
-        #start-screen h1:nth-of-type(2) {
-            color: var(--accent-yellow);
+
+        .boot-screen h1 {
+            font-size: 4rem;
+            margin: 0;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            letter-spacing: -2px;
         }
-        .terminal-line {
-            font-size: 0.7rem;
-            color: var(--accent-blue);
-            margin: 5px 0;
-            text-align: left;
-            display: inline-block;
+
+        .boot-screen h2 {
+            font-size: 1.2rem;
+            margin: 10px 0 0 0;
+            color: var(--primary-dark);
+            font-weight: 300;
+            letter-spacing: 3px;
         }
-        .blink { animation: blink 1s step-end infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-        
-        .hidden { display: none !important; }
-        
+
+        .boot-info {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-purple);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .boot-info div {
+            opacity: 0;
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        .boot-info div:nth-child(1) { animation-delay: 0.2s; }
+        .boot-info div:nth-child(2) { animation-delay: 0.4s; }
+        .boot-info div:nth-child(3) { animation-delay: 0.6s; }
+
+        .click-prompt {
+            font-size: 0.85rem;
+            color: var(--accent-pink);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
         #desktop {
             position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
-            height: calc(100vh - 44px);
+            height: calc(100vh - 60px);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10;
         }
+
+        #desktop.hidden {
+            display: none;
+        }
+
         .desktop-icons-circle {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: 500px;
+            height: 500px;
         }
+
         .desktop-icon {
             position: absolute;
-            width: 80px;
+            width: 90px;
             display: flex;
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            transition: all 0.3s;
-            padding: 8px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 12px;
             text-align: center;
-            border: 2px solid transparent;
         }
+
         .desktop-icon:hover {
-            transform: scale(1.1);
-            border: 2px dashed var(--accent-yellow);
-            background-color: rgba(224, 224, 224, 0.2);
+            transform: scale(1.15) translateY(-10px);
         }
+
         .desktop-icon .icon {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 8px;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 12px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
             transition: all 0.3s;
+            border-radius: 12px;
         }
+
         .desktop-icon:hover .icon {
-            filter: brightness(1.2);
+            filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.2));
         }
+
         .desktop-icon span {
-            font-size: 0.7rem;
-            color: var(--primary-text);
-            text-shadow: 1px 1px 0 var(--primary-bg);
-            padding: 2px 4px;
-            background-color: rgba(10, 10, 26, 0.5);
-            transition: all 0.3s;
+            font-size: 0.75rem;
+            color: var(--primary-dark);
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
-        .desktop-icon:hover span {
-            background-color: rgba(255, 204, 0, 0.8);
-            color: var(--primary-bg);
-        }
-        
+
         #taskbar {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 44px;
-            background: rgba(20, 20, 40, 0.95);
-            border-top: 4px solid var(--primary-text);
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
             z-index: 5000;
             display: flex;
             align-items: center;
-            padding: 0 10px;
+            padding: 0 20px;
+            gap: 15px;
             box-sizing: border-box;
-            gap: 10px;
         }
+
+        #taskbar.hidden {
+            display: none;
+        }
+
         .taskbar-clock {
-            font-size: 0.7rem;
-            color: var(--primary-text);
-            min-width: 100px;
-            text-align: center;
+            font-size: 0.75rem;
+            color: var(--primary-dark);
+            min-width: 80px;
+            font-weight: 600;
+            font-family: 'Space Mono', monospace;
         }
+
         .taskbar-center {
             flex: 1;
             display: flex;
-            gap: 5px;
+            gap: 8px;
             overflow-x: auto;
         }
+
         .taskbar-item {
-            font-size: 0.7rem;
-            padding: 0 12px;
-            background-color: var(--primary-text);
-            color: var(--primary-bg);
-            border: 2px solid var(--primary-bg);
+            font-size: 0.75rem;
+            padding: 8px 16px;
+            background: var(--primary-dark);
+            color: white;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
-            height: 32px;
+            height: 36px;
             display: flex;
             align-items: center;
             white-space: nowrap;
             transition: all 0.3s;
             flex-shrink: 0;
-            box-shadow: 2px 2px 0 var(--primary-bg);
+            font-weight: 500;
         }
+
         .taskbar-item:hover {
-            background-color: var(--accent-yellow);
+            background: var(--accent-pink);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 0, 110, 0.3);
         }
+
         .taskbar-item.active {
-            background-color: var(--accent-yellow);
+            background: var(--gradient-1);
+            box-shadow: 0 4px 12px rgba(255, 0, 110, 0.3);
         }
-        
+
         .content-window {
             position: fixed;
-            background: rgba(20, 20, 40, 0.98);
-            border: 4px solid var(--primary-text);
-            box-shadow: 0 0 30px rgba(128, 0, 128, 0.7);
-            width: 600px;
-            height: 400px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            width: 650px;
+            height: 450px;
             z-index: 1000;
             overflow: hidden;
-            animation: window-open 0.5s ease-out;
+            animation: windowOpen 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        @keyframes window-open {
-            0% { opacity: 0; transform: scale(0.7); }
-            100% { opacity: 1; transform: scale(1); }
+
+        @keyframes windowOpen {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
+
         .content-window.fullscreen {
             width: 100% !important;
-            height: calc(100vh - 44px) !important;
+            height: calc(100vh - 60px) !important;
             left: 0 !important;
             top: 0 !important;
+            border-radius: 0;
         }
-        
+
         .window-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            border-bottom: 2px solid var(--primary-text);
+            padding: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
             cursor: move;
-            background: rgba(10, 10, 26, 0.7);
             user-select: none;
         }
+
         .window-title {
-            color: var(--accent-yellow);
-            font-size: 0.9rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1rem;
             margin: 0;
+            font-weight: 700;
         }
+
         .window-controls {
             display: flex;
-            gap: 5px;
+            gap: 8px;
         }
+
         .window-btn {
             background: none;
-            border: 2px solid var(--primary-text);
-            color: var(--primary-text);
-            font-family: 'Press Start 2P', cursive;
-            padding: 4px 8px;
+            border: none;
+            color: var(--primary-dark);
+            font-family: 'Inter', sans-serif;
+            padding: 6px 10px;
             cursor: pointer;
-            font-size: 0.6rem;
-            width: 24px;
-            height: 24px;
+            font-size: 1rem;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
+            border-radius: 6px;
         }
+
         .close-btn:hover {
-            background-color: var(--accent-red);
-            color: white;
+            background-color: rgba(255, 0, 110, 0.1);
+            color: var(--accent-pink);
         }
+
         .fullscreen-btn:hover {
-            background-color: var(--accent-blue);
-            color: white;
+            background-color: rgba(58, 134, 255, 0.1);
+            color: var(--accent-cyan);
         }
+
         .window-content {
             height: calc(100% - 60px);
             overflow-y: auto;
-            padding: 15px;
+            padding: 20px;
         }
+
         .window-content::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
+
+        .window-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+
         .window-content::-webkit-scrollbar-thumb {
-            background: var(--accent-yellow);
-            border: 1px solid var(--primary-text);
+            background: var(--accent-pink);
+            border-radius: 4px;
         }
-        
+
         .inventory-grid {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 16px;
         }
+
         .inventory-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 12px;
-            border: 2px solid var(--primary-text);
+            background: linear-gradient(135deg, rgba(255, 0, 110, 0.05) 0%, rgba(131, 56, 236, 0.05) 100%);
+            padding: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
             transition: all 0.3s;
         }
+
         .inventory-item:hover {
-            background: rgba(128, 0, 128, 0.25);
-            border-color: var(--accent-yellow);
-            transform: translateX(8px);
+            background: linear-gradient(135deg, rgba(255, 0, 110, 0.1) 0%, rgba(131, 56, 236, 0.1) 100%);
+            border-color: var(--accent-pink);
+            transform: translateX(4px);
         }
+
         .item-info h4 {
-            color: var(--accent-yellow);
-            margin: 0 0 5px 0;
-            font-size: 0.8rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 8px 0;
+            font-size: 0.9rem;
+            font-weight: 700;
         }
+
         .item-type {
-            font-size: 0.6rem;
-            color: #aaa;
-            margin-bottom: 5px;
+            font-size: 0.7rem;
+            color: var(--accent-purple);
+            margin-bottom: 8px;
+            font-weight: 600;
         }
+
         .item-desc {
-            font-size: 0.6rem;
-            line-height: 1.4;
-            margin-bottom: 10px;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            color: var(--primary-dark);
         }
+
         .item-stats {
-            font-size: 0.6rem;
-            border-top: 1px dotted var(--primary-text);
-            padding-top: 8px;
+            font-size: 0.7rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            padding-top: 10px;
+            color: #666;
         }
-        
+
         .retro-link {
-            color: var(--accent-yellow);
+            background: var(--gradient-1);
+            color: white;
             text-decoration: none;
-            border: 1px solid var(--accent-yellow);
-            padding: 6px 12px;
-            margin: 2px;
-            font-size: 0.6rem;
+            border: none;
+            padding: 8px 14px;
+            margin: 4px 4px 4px 0;
+            font-size: 0.7rem;
             cursor: pointer;
-            background: rgba(255, 204, 0, 0.1);
             display: inline-block;
             transition: all 0.3s;
-            font-family: 'Press Start 2P', cursive;
+            font-family: 'Inter', sans-serif;
+            border-radius: 8px;
+            font-weight: 600;
         }
+
         .retro-link:hover {
-            color: var(--primary-bg);
-            background-color: var(--accent-yellow);
-            box-shadow: 0 0 10px var(--accent-yellow);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255, 0, 110, 0.3);
         }
-        
+
         .settings-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 16px;
         }
+
         .setting-item {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(131, 56, 236, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
         }
+
         .setting-item label {
-            font-size: 0.6rem;
-            color: var(--accent-yellow);
-        }
-        
-        .crt-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 900;
-            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px);
-            opacity: 0.3;
-        }
-        
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-        .particle {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: float 20s infinite linear;
-        }
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-100px) translateX(100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        #stars-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .star {
-            position: absolute;
-            background: #ffffff;
-            border-radius: 50%;
-            animation: twinkle 3s infinite alternate;
-        }
-        .star.small {
-            width: 1px;
-            height: 1px;
-            animation-duration: 2s;
-        }
-        .star.medium {
-            width: 2px;
-            height: 2px;
-            animation-duration: 4s;
-        }
-        .star.large {
-            width: 3px;
-            height: 3px;
-            animation-duration: 6s;
-        }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        #terminal-display {
-            background: black;
-            color: var(--accent-green);
-            font-family: monospace;
-            padding: 10px;
-            height: 100%;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-size: 0.65rem;
-        }
-
-        .terminal-line {
-            opacity: 0;
-            animation: appear 0.2s ease forwards;
-        }
-
-        @keyframes appear {
-            to { opacity: 1; }
+            font-size: 0.75rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
         }
 
         .music-visualizer {
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            height: 80px;
-            gap: 3px;
-            margin: 20px 0;
+            height: 60px;
+            gap: 4px;
+            margin: 16px 0;
         }
 
         .music-bar {
-            width: 6px;
-            background: var(--accent-green);
+            width: 5px;
+            background: var(--gradient-1);
             border-radius: 2px;
             animation: equalizer 1s infinite ease-in-out;
         }
 
         @keyframes equalizer {
             0%, 100% { transform: scaleY(0.3); }
-            50% { transform: scaleY(1.2); }
+            50% { transform: scaleY(1); }
         }
 
         .track-list {
-            max-height: 300px;
+            max-height: 250px;
             overflow-y: auto;
-            border: 1px solid var(--primary-text);
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            background: rgba(131, 56, 236, 0.03);
         }
 
         .track-item {
-            padding: 8px;
-            border-bottom: 1px dotted var(--primary-text);
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             cursor: pointer;
-            font-size: 0.6rem;
+            font-size: 0.75rem;
             transition: all 0.3s;
         }
 
         .track-item:hover {
-            background: rgba(255, 204, 0, 0.2);
-            color: var(--accent-yellow);
+            background: rgba(255, 0, 110, 0.1);
+            color: var(--accent-pink);
+            padding-left: 16px;
         }
 
         .track-item:last-child {
             border-bottom: none;
         }
-        
-        .icon-installations { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect x="8" y="8" width="32" height="32" fill="%23ffcc00"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23ffcc00"/></svg>'); }
-        .icon-projets { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect x="8" y="8" width="32" height="32" fill="%2300aaff"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%2300aaff"/></svg>'); }
-        .icon-about { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect x="8" y="8" width="32" height="32" fill="%23800080"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23800080"/></svg>'); }
-        .icon-parametres { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect x="8" y="8" width="32" height="32" fill="%23ff0000"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%23ff0000"/></svg>'); }
-        .icon-musique { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect x="8" y="8" width="32" height="32" fill="%2300FF66"/><rect x="12" y="12" width="24" height="24" fill="%230a0a1a"/><circle cx="24" cy="24" r="8" fill="%2300FF66"/></svg>'); }
+
+        #terminal-display {
+            background: var(--primary-dark);
+            color: var(--accent-lime);
+            font-family: 'Space Mono', monospace;
+            padding: 12px;
+            height: 100%;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.7rem;
+            border-radius: 8px;
+        }
+
+        .terminal-line {
+            opacity: 0;
+            animation: appear 0.3s ease forwards;
+        }
+
+        @keyframes appear {
+            to { opacity: 1; }
+        }
+
+        .icon-installations {
+            background: linear-gradient(135deg, #ff006e 0%, #ff6b9d 100%);
+        }
+
+        .icon-projets {
+            background: linear-gradient(135deg, #3a86ff 0%, #72ddf7 100%);
+        }
+
+        .icon-about {
+            background: linear-gradient(135deg, #8338ec 0%, #c1a0fc 100%);
+        }
+
+        .icon-parametres {
+            background: linear-gradient(135deg, #06ffa5 0%, #68ffb7 100%);
+        }
+
+        .icon-musique {
+            background: linear-gradient(135deg, #ff006e 0%, #8338ec 100%);
+        }
+
+        .icon {
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        #windows-container {
+            position: relative;
+            z-index: 500;
+        }
     </style>
 </head>
 <body>
     <div id="start-screen">
-        <h1>PORTFOLIO</h1>
-        <h1>ARTHUR CIEUX</h1>
-        <div class="terminal-line">> SYSTEM BOOT: PIXEL_OS v2.1.5</div>
-        <div class="terminal-line">> LOADING PORTFOLIO_DATA...</div>
-        <div class="terminal-line">> INITIALIZING CRT DISPLAY...</div>
-        <p class="blink">[ CLIQUEZ POUR DÉMARRER ]</p>
+        <div class="boot-screen">
+            <h1>ARTHUR CIEUX</h1>
+            <h2>PORTFOLIO STUDIO</h2>
+        </div>
+        <div class="boot-info">
+            <div>> Initializing portfolio system...</div>
+            <div>> Loading visual components...</div>
+            <div>> Ready for interaction</div>
+        </div>
+        <div class="click-prompt">↓ Click to enter ↓</div>
     </div>
 
     <div id="desktop" class="hidden">
@@ -500,9 +574,6 @@
     </div>
 
     <div id="windows-container"></div>
-    <div class="particles" id="particles-container"></div>
-    <div id="stars-container"></div>
-    <div class="crt-overlay"></div>
 
     <script>
         const startScreen = document.getElementById('start-screen');
@@ -512,7 +583,6 @@
         const taskbarItems = document.getElementById('taskbar-items');
         const clock = document.getElementById('clock');
         const windowsContainer = document.getElementById('windows-container');
-        const particlesContainer = document.getElementById('particles-container');
 
         let openWindows = {};
         let zIndexCounter = 1000;
@@ -525,36 +595,21 @@
             { title: 'Track 03', url: 'https://www.youtube.com/watch?v=ZYdd73SOxhY&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=3' },
             { title: 'Track 04', url: 'https://www.youtube.com/watch?v=nMb5nyoi364&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=4' },
             { title: 'Track 05', url: 'https://www.youtube.com/watch?v=r3K5uKMca2g&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=5' },
-            { title: 'Track 06', url: 'https://www.youtube.com/watch?v=-gU_jhD4-gU&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=6' },
-            { title: 'Track 07', url: 'https://www.youtube.com/watch?v=zXWdIwlsX0k&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=7' },
-            { title: 'Track 08', url: 'https://www.youtube.com/watch?v=hkalzgipJ4k&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=8' },
-            { title: 'Track 09', url: 'https://www.youtube.com/watch?v=hAUSlgrkFW4&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=9' },
-            { title: 'Track 10', url: 'https://www.youtube.com/watch?v=7WPIITeW2oI&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=10' },
-            { title: 'Track 11', url: 'https://www.youtube.com/watch?v=aTke5TuNzpk&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=11' },
-            { title: 'Track 12', url: 'https://www.youtube.com/watch?v=YIB_i8QziJc&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=12' },
-            { title: 'Track 13', url: 'https://www.youtube.com/watch?v=So05yb9a_KU&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=13' },
-            { title: 'Track 14', url: 'https://www.youtube.com/watch?v=c-L4xUWnkAk&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=14' },
-            { title: 'Track 15', url: 'https://www.youtube.com/watch?v=mLSMTDLa7rw&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=15' },
-            { title: 'Track 16', url: 'https://www.youtube.com/watch?v=2yyUvvjWHgg&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=16' },
-            { title: 'Track 17', url: 'https://www.youtube.com/watch?v=TbP3LAuTTCY&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=17' },
-            { title: 'Track 18', url: 'https://www.youtube.com/watch?v=j4w_mQdwfaE&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=18' },
-            { title: 'Track 19', url: 'https://www.youtube.com/watch?v=MDgC7BI5W8g&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=19' },
-            { title: 'Track 20', url: 'https://www.youtube.com/watch?v=PcJOlkNMXW8&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=20' }
         ];
 
         const applications = [
             {
                 id: 'installations',
-                title: 'Installations',
+                title: 'Compétences',
                 icon: 'icon-installations',
                 content: `
                     <div class="inventory-grid">
-                        <div class="inventory-item" style="text-align: center; padding: 40px;">
+                        <div class="inventory-item" style="text-align: center; padding: 30px;">
                             <div class="item-info">
-                                <h4>SYSTEM READY</h4>
+                                <h4>Système Prêt</h4>
                                 <div class="item-type">Compétences en Chargement</div>
-                                <div class="item-desc">Système prêt à recevoir tes vraies compétences et technologies maîtrisées.</div>
-                                <div class="item-stats"><strong>Status:</strong> En attente de données utilisateur</div>
+                                <div class="item-desc">Vos compétences et technologies maîtrisées seront affichées ici.</div>
+                                <div class="item-stats"><strong>Statut:</strong> Prêt pour les données</div>
                             </div>
                         </div>
                     </div>
@@ -562,57 +617,26 @@
             },
             {
                 id: 'projets',
-                title: 'Projets Récents',
+                title: 'Projets',
                 icon: 'icon-projets',
                 content: `
                     <div class="inventory-grid">
                         <div class="inventory-item">
                             <div class="item-info">
-                                <h4>SOUS LE FLUX</h4>
-                                <div class="item-type">Video Mapping - Projection au Sol</div>
-                                <div class="item-desc">Installation immersive représentant les flux de données mondiaux en temps réel à travers une projection cartographique interactive.</div>
-                                <div class="item-stats">
-                                    <strong>Technologies:</strong> Three.js, WebGL, Data Visualization<br>
-                                    <strong>Concepts:</strong> Cartographie interactive, Flux réseaux, Visualisation de données
-                                </div>
-                                <div id="floor-projector" style="width: 100%; height: 150px; background: linear-gradient(45deg, #0a0a1a 0%, #1a1a3a 100%); border: 2px solid var(--accent-yellow); margin-top: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden;">
-                                    <div style="text-align: center; z-index: 2;">
-                                        <div style="color: var(--accent-yellow); font-size: 0.7rem; margin-bottom: 10px;">VIDEO MAPPING - SOUS LE FLUX</div>
-                                        <div style="width: 80px; height: 2px; background: var(--accent-blue); margin: 5px auto;"></div>
-                                        <div style="display: flex; gap: 3px; justify-content: center; margin-top: 10px;">
-                                            <div style="width: 4px; height: 4px; background: var(--accent-yellow); animation: blink 1s infinite;"></div>
-                                            <div style="width: 4px; height: 4px; background: var(--accent-blue); animation: blink 1s infinite 0.2s;"></div>
-                                            <div style="width: 4px; height: 4px; background: var(--accent-purple); animation: blink 1s infinite 0.4s;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 10px;">
-                                    <a href="#" class="retro-link launch-project-btn" data-project="sous-le-flux">Lancer le projet</a>
-                                </div>
+                                <h4>Sous le Flux</h4>
+                                <div class="item-type">Video Mapping - Data Visualization</div>
+                                <div class="item-desc">Installation immersive représentant les flux de données mondiaux en temps réel.</div>
+                                <div class="item-stats"><strong>Tech:</strong> Three.js, WebGL</div>
+                                <button class="retro-link launch-project-btn" data-project="sous-le-flux" style="margin-top: 10px;">Voir le projet</button>
                             </div>
                         </div>
                         <div class="inventory-item">
                             <div class="item-info">
-                                <h4>LECTURE // TERMINAL</h4>
-                                <div class="item-type">Installation Interactive - Archive Internet</div>
-                                <div class="item-desc">Installation composée d'un ordinateur exécutant seul un script lisant le fichier cc-index-table.paths (une sauvegarde de l'ensemble d'Internet à un moment donné), rendant visible la lecture du script à travers un terminal de commande.</div>
-                                <div class="item-stats">
-                                    <strong>Technologies:</strong> HTML5, JavaScript, Web APIs<br>
-                                    <strong>Concepts:</strong> Archive Internet, Visualisation données, Terminal interactif
-                                </div>
-                                <div id="terminal-preview" style="width: 100%; height: 120px; background: black; border: 2px solid var(--accent-green); margin-top: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; color: var(--accent-green); font-family: monospace; font-size: 0.5rem; padding: 10px;">
-                                    <div style="text-align: left; width: 100%; height: 100%; overflow: hidden;">
-                                        <div>>> LECTURE DU FICHIER cc-index-table.paths ...</div>
-                                        <div>[OK] Connexion à l'archive Common Crawl</div>
-                                        <div>[INFO] Lecture en cours...</div>
-                                        <div style="color: var(--accent-blue);">https://example.com/</div>
-                                        <div style="color: var(--accent-blue);">https://news.example.org/article/1</div>
-                                        <div style="color: var(--accent-blue);">https://cdn.images.net/data/2021/10/asset.png</div>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 10px;">
-                                    <a href="#" class="retro-link launch-project-btn" data-project="lecture-terminal">Lancer le projet</a>
-                                </div>
+                                <h4>Lecture Terminal</h4>
+                                <div class="item-type">Installation Interactive</div>
+                                <div class="item-desc">Visualisation interactive de l'archive Common Crawl à travers un terminal.</div>
+                                <div class="item-stats"><strong>Tech:</strong> HTML5, JavaScript</div>
+                                <button class="retro-link launch-project-btn" data-project="lecture-terminal" style="margin-top: 10px;">Voir le projet</button>
                             </div>
                         </div>
                     </div>
@@ -620,46 +644,17 @@
             },
             {
                 id: 'musique',
-                title: 'Projet Musical',
+                title: 'Musique',
                 icon: 'icon-musique',
                 content: `
                     <div class="inventory-grid">
                         <div class="inventory-item">
                             <div class="item-info">
-                                <h4>SONORITÉS CALMES & JAZZ NUMÉRIQUE</h4>
-                                <div class="item-type">Composition & Production Musicale</div>
-                                <div class="item-desc">Exploration des sonorités douces et délicates, mêlant influences jazz et esthétiques numériques. Une approche contemplative de la composition électronique distribuée sur toutes les plateformes musicales.</div>
-                                <div class="item-stats">
-                                    <strong>Genre:</strong> Jazz Numérique / Ambient Électronique<br>
-                                    <strong>Approche:</strong> Exploration sonore, synthèse de textures, atmosphères organiques<br>
-                                    <strong>Distribution:</strong> YouTube, Spotify, Apple Music, et autres plateformes
-                                </div>
-                                <div id="music-player-preview" style="width: 100%; height: 120px; background: linear-gradient(135deg, #0a0a1a 0%, #1a2a1a 100%); border: 2px solid var(--accent-green); margin-top: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden;">
-                                    <div style="text-align: center; z-index: 2;">
-                                        <div style="color: var(--accent-green); font-size: 0.7rem; margin-bottom: 10px;">LECTEUR AUDIO - PROJET ARTISTIQUE</div>
-                                        <div style="display: flex; gap: 3px; justify-content: center; margin: 10px 0;">
-                                            <div style="width: 4px; height: 20px; background: var(--accent-green); animation: equalizer 1s infinite ease-in-out;"></div>
-                                            <div style="width: 4px; height: 15px; background: var(--accent-green); animation: equalizer 1s infinite 0.1s ease-in-out;"></div>
-                                            <div style="width: 4px; height: 25px; background: var(--accent-green); animation: equalizer 1s infinite 0.2s ease-in-out;"></div>
-                                            <div style="width: 4px; height: 18px; background: var(--accent-green); animation: equalizer 1s infinite 0.3s ease-in-out;"></div>
-                                            <div style="width: 4px; height: 22px; background: var(--accent-green); animation: equalizer 1s infinite 0.4s ease-in-out;"></div>
-                                        </div>
-                                        <div style="color: var(--accent-blue); font-size: 0.6rem; margin-top: 5px;">20 compositions disponibles</div>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 10px;">
-                                    <div style="position: relative; display: inline-block;">
-                                        <button class="retro-link" style="font-size: 0.6rem; background-color: rgba(0, 255, 102, 0.15); border-color: var(--accent-green); cursor: pointer; font-family: 'Press Start 2P', cursive;">PROFIL MUSICAL</button>
-                                        <div style="display: none; position: absolute; bottom: 100%; left: 0; background: rgba(20, 20, 40, 0.98); border: 2px solid var(--accent-green); z-index: 10000; min-width: 180px; margin-bottom: 5px; box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);">
-                                            <a href="https://music.apple.com/fr/album/lf/1833155912" target="_blank" style="display: block; padding: 10px 12px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.55rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🍎 Apple Music</a>
-                                            <a href="https://open.spotify.com/intl-fr/artist/0oxQsg9xEMZMl3iZHiZlBq" target="_blank" style="display: block; padding: 10px 12px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.55rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🎵 Spotify</a>
-                                            <a href="https://www.youtube.com/channel/UCH17Gl2MRr9D3kB54iBPtvg" target="_blank" style="display: block; padding: 10px 12px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.55rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">▶ YouTube</a>
-                                            <a href="https://www.qobuz.com/ca-fr/album/lf-arthur-cieux/luph0y3jjm1qb" target="_blank" style="display: block; padding: 10px 12px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.55rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">♫ Qobuz</a>
-                                            <a href="https://music.amazon.in/artists/B0DXQ4C37T/arthur-cieux" target="_blank" style="display: block; padding: 10px 12px; color: var(--accent-yellow); text-decoration: none; font-size: 0.55rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🎧 Amazon Music</a>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="retro-link launch-project-btn" data-project="musique">Lecteur Audio</a>
-                                </div>
+                                <h4>Sonorités Calmes</h4>
+                                <div class="item-type">Jazz Numérique & Ambient Électronique</div>
+                                <div class="item-desc">Exploration des sonorités douces mêlant influences jazz et esthétiques numériques.</div>
+                                <div class="item-stats"><strong>Distribution:</strong> Spotify, Apple Music, YouTube</div>
+                                <button class="retro-link launch-project-btn" data-project="musique" style="margin-top: 10px;">Lecteur Audio</button>
                             </div>
                         </div>
                     </div>
@@ -673,19 +668,15 @@
                     <div class="inventory-grid">
                         <div class="inventory-item">
                             <div class="item-info">
-                                <h4>> PROFIL DÉVELOPPEUR FULL STACK</h4>
-                                <div class="item-desc">Passionné par la création d'expériences digitales innovantes, je combine expertise technique et sens du design.</div>
-                                <div class="item-stats" style="margin-top: 15px;">
-                                    <strong>> EXPÉRIENCE & COMPÉTENCES</strong><br>
-                                    • 5+ ans en développement web full stack<br>
-                                    • Spécialisé en JavaScript/TypeScript<br>
-                                    • Architecture cloud et DevOps<br>
-                                    • Design system et UI/UX
-                                </div>
-                                <div style="margin-top: 15px;">
-                                    <a href="mailto:arthur@cieux.dev" class="retro-link">Email</a>
-                                    <a href="#" class="retro-link">GitHub</a>
-                                    <a href="#" class="retro-link">LinkedIn</a>
+                                <h4>Développeur Full Stack</h4>
+                                <div class="item-type">Designer & Créatif</div>
+                                <div class="item-desc">Passionné par la création d'expériences digitales innovantes, combinant expertise technique et sens du design.</div>
+                                <div class="item-stats" style="margin-top: 12px;">
+                                    <strong>Expertise:</strong><br>
+                                    • JavaScript / TypeScript<br>
+                                    • React & Vue.js<br>
+                                    • Three.js & WebGL<br>
+                                    • Design System & UI/UX
                                 </div>
                             </div>
                         </div>
@@ -700,22 +691,21 @@
                     <div class="settings-grid">
                         <div class="setting-item">
                             <label>Version</label>
-                            <div>PixelOS v2.1.5</div>
+                            <div style="font-size: 0.8rem;">2.0.0</div>
                         </div>
                         <div class="setting-item">
                             <label>Résolution</label>
-                            <div style="font-size: 0.6rem;">1920x1080</div>
+                            <div style="font-size: 0.8rem;">1920x1080</div>
                         </div>
                         <div class="setting-item">
                             <label>Thème</label>
-                            <div style="font-size: 0.6rem;">Neon Rétro</div>
+                            <div style="font-size: 0.8rem;">Minimal Modern</div>
                         </div>
                         <div class="setting-item">
                             <label>Statut</label>
-                            <div style="font-size: 0.6rem;">● Actif</div>
+                            <div style="font-size: 0.8rem;">● Actif</div>
                         </div>
                     </div>
-                    <button style="margin-top: 20px; background-color: var(--primary-text); color: var(--primary-bg); border: 2px solid var(--primary-bg); padding: 8px 16px; cursor: pointer; font-family: 'Press Start 2P'; font-size: 0.6rem; box-shadow: 2px 2px 0 var(--primary-bg);">Reset System</button>
                 `
             }
         ];
@@ -725,14 +715,12 @@
             desktop.classList.remove('hidden');
             taskbar.classList.remove('hidden');
             createDesktopIcons();
-            createParticles();
-            createStars();
             updateClock();
             setInterval(updateClock, 1000);
         });
 
         function createDesktopIcons() {
-            const radius = 150;
+            const radius = 180;
             const angleStep = (2 * Math.PI) / applications.length;
             
             applications.forEach((app, index) => {
@@ -742,8 +730,8 @@
                 
                 const icon = document.createElement('div');
                 icon.className = 'desktop-icon';
-                icon.style.left = `calc(50% + ${x}px - 40px)`;
-                icon.style.top = `calc(50% + ${y}px - 40px)`;
+                icon.style.left = `calc(50% + ${x}px - 45px)`;
+                icon.style.top = `calc(50% + ${y}px - 45px)`;
                 icon.innerHTML = `
                     <div class="icon ${app.icon}"></div>
                     <span>${app.title}</span>
@@ -832,17 +820,6 @@
             windowElement.addEventListener('mousedown', () => {
                 windowElement.style.zIndex = ++zIndexCounter;
             });
-
-            if (app.id === 'musique') {
-                const profileBtn = windowElement.querySelector('.retro-link:not(.launch-project-btn)');
-                if (profileBtn) {
-                    const menu = profileBtn.nextElementSibling;
-                    profileBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-                    });
-                }
-            }
         }
 
         function addToTaskbar(app) {
@@ -877,39 +854,6 @@
             });
         }
 
-        function createParticles() {
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.width = (Math.random() * 3) + 'px';
-                particle.style.height = particle.style.width;
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.opacity = Math.random() * 0.5 + 0.5;
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                particle.style.animationDelay = Math.random() * 5 + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        function createStars() {
-            const starsContainer = document.getElementById('stars-container');
-            const starCount = 150;
-            
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                const sizes = ['small', 'medium', 'large'];
-                const sizeClass = sizes[Math.floor(Math.random() * sizes.length)];
-                
-                star.className = `star ${sizeClass}`;
-                star.style.left = `${Math.random() * 100}vw`;
-                star.style.top = `${Math.random() * 100}vh`;
-                star.style.animationDelay = `${Math.random() * 5}s`;
-                
-                starsContainer.appendChild(star);
-            }
-        }
-
         function launchSousLeFlux() {
             const projectWindow = document.createElement('div');
             projectWindow.className = 'content-window';
@@ -922,13 +866,13 @@
             
             projectWindow.innerHTML = `
                 <div class="window-header">
-                    <h3 class="window-title">SOUS LE FLUX - Video Mapping</h3>
+                    <h3 class="window-title">Sous le Flux - Data Visualization</h3>
                     <div class="window-controls">
                         <button class="window-btn close-btn">✕</button>
                     </div>
                 </div>
                 <div class="window-content" style="padding: 0; overflow: hidden;">
-                    <div id="sous-le-flux-container" style="width: 100%; height: 100%; position: relative; background: #000;">
+                    <div id="sous-le-flux-container" style="width: 100%; height: 100%; position: relative; background: var(--primary-dark);">
                         <canvas id="sous-le-flux-canvas" style="display: block; width: 100%; height: 100%;"></canvas>
                     </div>
                 </div>
@@ -944,7 +888,7 @@
                 projectWindow.remove();
             });
             
-            initSousLeFlux();
+            setTimeout(() => initSousLeFlux(), 100);
         }
 
         function initSousLeFlux() {
@@ -957,8 +901,9 @@
             camera.position.set(0, 30, 0);
             camera.lookAt(0, 0, 0);
             
-            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setClearColor(0x1a1a1a);
             
             const continents = [
                 [[-20, 12], [-18, 14], [-16, 15], [-14, 14], [-12, 12], [-14, 10], [-16, 8], [-18, 6], [-20, 8], [-22, 10]],
@@ -973,7 +918,7 @@
                 const points = continent.map(([x, z]) => new THREE.Vector3(x, 0.01, z));
                 points.push(points[0]);
                 const geom = new THREE.BufferGeometry().setFromPoints(points);
-                const mat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 });
+                const mat = new THREE.LineBasicMaterial({ color: 0xff006e, transparent: true, opacity: 0.4 });
                 scene.add(new THREE.Line(geom, mat));
             });
             
@@ -984,8 +929,8 @@
                 { x: 18, z: 12 }, { x: 12, z: 12 }, { x: 18, z: -6 }
             ];
             
-            const nodeGeom = new THREE.CircleGeometry(0.2, 16);
-            const nodeMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 });
+            const nodeGeom = new THREE.CircleGeometry(0.3, 16);
+            const nodeMat = new THREE.MeshBasicMaterial({ color: 0x06ffa5, transparent: true, opacity: 1 });
             nodes.forEach(n => {
                 const mesh = new THREE.Mesh(nodeGeom, nodeMat.clone());
                 mesh.position.set(n.x, 0.02, n.z);
@@ -1004,15 +949,15 @@
                     new THREE.Vector3(nodes[i].x, 0.01, nodes[i].z),
                     new THREE.Vector3(nodes[j].x, 0.01, nodes[j].z)
                 ]);
-                const mat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.15 });
+                const mat = new THREE.LineBasicMaterial({ color: 0x3a86ff, transparent: true, opacity: 0.3 });
                 scene.add(new THREE.Line(geom, mat));
             });
             
             class DataPacket {
                 constructor() {
                     this.selectRoute();
-                    const geom = new THREE.SphereGeometry(0.06, 8, 8);
-                    const mat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 1 });
+                    const geom = new THREE.SphereGeometry(0.08, 8, 8);
+                    const mat = new THREE.MeshBasicMaterial({ color: 0xff006e, transparent: true, opacity: 1 });
                     this.mesh = new THREE.Mesh(geom, mat);
                     scene.add(this.mesh);
                 }
@@ -1035,7 +980,7 @@
             }
             
             const packets = [];
-            for (let i = 0; i < 150; i++) packets.push(new DataPacket());
+            for (let i = 0; i < 200; i++) packets.push(new DataPacket());
             
             const animate = () => {
                 requestAnimationFrame(animate);
@@ -1059,7 +1004,7 @@
             
             projectWindow.innerHTML = `
                 <div class="window-header">
-                    <h3 class="window-title">LECTEUR // TERMINAL</h3>
+                    <h3 class="window-title">Lecteur Terminal</h3>
                     <div class="window-controls">
                         <button class="window-btn close-btn">✕</button>
                     </div>
@@ -1145,50 +1090,22 @@
             
             projectWindow.innerHTML = `
                 <div class="window-header">
-                    <h3 class="window-title">LECTEUR AUDIO - PROJET ARTISTIQUE</h3>
+                    <h3 class="window-title">Lecteur Audio - Sonorités Calmes</h3>
                     <div class="window-controls">
                         <button class="window-btn close-btn">✕</button>
                     </div>
                 </div>
                 <div class="window-content" style="padding: 20px; text-align: center;">
-                    <div style="background: linear-gradient(135deg, #0a0a1a 0%, #1a2a1a 100%); border: 3px solid var(--accent-green); padding: 25px; margin-bottom: 20px;">
-                        <h4 style="color: var(--accent-green); margin-bottom: 15px; font-size: 0.8rem;">SONORITÉS CALMES & JAZZ NUMÉRIQUE</h4>
-                        <div style="display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; flex-wrap: wrap;">
-                            <div style="flex: 1; min-width: 180px; text-align: left;">
-                                <div style="font-size: 0.65rem; color: var(--accent-yellow); margin-bottom: 8px;">À PROPOS</div>
-                                <div style="font-size: 0.55rem; line-height: 1.4;">
-                                    Exploration des sonorités douces et délicates, mêlant influences jazz et esthétiques numériques. Approche contemplative.
-                                </div>
-                            </div>
-                            <div style="flex: 1; min-width: 180px; text-align: left;">
-                                <div style="font-size: 0.65rem; color: var(--accent-yellow); margin-bottom: 8px;">DISTRIBUTION</div>
-                                <div style="font-size: 0.55rem; line-height: 1.4;">
-                                    • YouTube<br>
-                                    • Spotify<br>
-                                    • Apple Music<br>
-                                    • Toutes plateformes
-                                </div>
-                            </div>
-                        </div>
-                        <div class="music-visualizer" id="music-visualizer">
-                            ${Array.from({length: 20}, (_, i) => 
-                                `<div class="music-bar" style="animation-delay: ${i * 0.05}s;"></div>`
-                            ).join('')}
-                        </div>
+                    <div class="music-visualizer" id="music-visualizer">
+                        ${Array.from({length: 20}, (_, i) => 
+                            `<div class="music-bar" style="animation-delay: ${i * 0.05}s;"></div>`
+                        ).join('')}
                     </div>
                     
-                    <div style="margin-bottom: 15px; position: relative; display: inline-block;">
-                        <button id="music-profile-btn" class="retro-link" style="font-size: 0.65rem; padding: 8px 15px; background-color: rgba(0, 255, 102, 0.15); border-color: var(--accent-green); cursor: pointer;">PROFIL MUSICAL</button>
-                        <div id="music-profile-menu" style="display: none; position: absolute; top: 100%; left: 0; background: rgba(20, 20, 40, 0.98); border: 2px solid var(--accent-green); z-index: 10000; min-width: 200px; margin-top: 5px; box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);">
-                            <a href="https://music.apple.com/fr/album/lf/1833155912" target="_blank" style="display: block; padding: 10px 15px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.6rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🍎 Apple Music</a>
-                            <a href="https://open.spotify.com/intl-fr/artist/0oxQsg9xEMZMl3iZHiZlBq" target="_blank" style="display: block; padding: 10px 15px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.6rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🎵 Spotify</a>
-                            <a href="https://www.youtube.com/channel/UCH17Gl2MRr9D3kB54iBPtvg" target="_blank" style="display: block; padding: 10px 15px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.6rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">▶ YouTube</a>
-                            <a href="https://www.qobuz.com/ca-fr/album/lf-arthur-cieux/luph0y3jjm1qb" target="_blank" style="display: block; padding: 10px 15px; color: var(--accent-yellow); text-decoration: none; border-bottom: 1px dotted var(--accent-blue); font-size: 0.6rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">♫ Qobuz</a>
-                            <a href="https://music.amazon.in/artists/B0DXQ4C37T/arthur-cieux" target="_blank" style="display: block; padding: 10px 15px; color: var(--accent-yellow); text-decoration: none; font-size: 0.6rem; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 204, 0, 0.2)'" onmouseout="this.style.background=''">🎧 Amazon Music</a>
-                        </div>
+                    <div style="margin: 20px 0; font-size: 0.8rem; color: var(--primary-dark);">
+                        <strong>20 compositions disponibles</strong>
                     </div>
                     
-                    <div style="font-size: 0.65rem; color: var(--accent-blue); margin-bottom: 10px;">20 COMPOSITIONS DISPONIBLES</div>
                     <div class="track-list">
                         ${tracksHtml}
                     </div>
@@ -1207,21 +1124,8 @@
                 item.addEventListener('click', () => {
                     const url = item.getAttribute('data-url');
                     window.open(url, '_blank');
-                    trackItems.forEach(i => i.style.background = '');
-                    item.style.background = 'rgba(0, 255, 102, 0.3)';
                 });
             });
-
-            const profileBtn = projectWindow.querySelector('#music-profile-btn');
-            if (profileBtn) {
-                const profileMenu = profileBtn.parentElement.querySelector('div[style*="display: none"]');
-                profileBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (profileMenu) {
-                        profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
-                    }
-                });
-            }
         }
 
         document.addEventListener('click', (e) => {
