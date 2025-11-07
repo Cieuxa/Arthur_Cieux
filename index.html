@@ -250,16 +250,29 @@
             box-shadow: 0 4px 12px rgba(255, 0, 110, 0.3);
         }
 
+        /* Correction des tailles de fenêtres */
         .content-window {
             position: fixed;
             background: white;
             border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            width: 650px;
-            height: 450px;
+            width: 700px;
+            height: 500px;
             z-index: 1000;
             overflow: hidden;
             animation: windowOpen 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .music-player-window {
+            width: 600px;
+            height: 500px;
+        }
+
+        .project-window {
+            width: 95%;
+            height: 90%;
+            left: 2.5% !important;
+            top: 5% !important;
         }
 
         @keyframes windowOpen {
@@ -450,6 +463,43 @@
             font-weight: 700;
         }
 
+        /* Amélioration UX Musique */
+        .music-controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .music-btn {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .music-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 0, 110, 0.3);
+        }
+
+        .track-item.active {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .track-info {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 0.8rem;
+            color: var(--accent-purple);
+        }
+
         .music-visualizer {
             display: flex;
             justify-content: center;
@@ -548,6 +598,247 @@
             position: relative;
             z-index: 500;
         }
+
+        /* Styles pour Sous le Flux */
+        .sous-le-flux-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #000000;
+        }
+
+        .sous-le-flux-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sous-le-flux-title {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            opacity: 0.9;
+            z-index: 10;
+        }
+
+        .sous-le-flux-signature {
+            position: absolute;
+            bottom: 40px;
+            right: 50px;
+            color: #ffffff;
+            font-family: Georgia, serif;
+            font-size: 18px;
+            font-style: italic;
+            opacity: 0.6;
+            z-index: 10;
+        }
+
+        /* Styles pour Commande Crawl - Version CC Index Table */
+        .cc-index-container {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .cc-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0f0;
+            padding-bottom: 15px;
+        }
+
+        .cc-header h2 {
+            color: #0f0;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .cc-header p {
+            color: #0f0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .cc-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cc-table th {
+            background: #1a1a1a;
+            color: #0f0;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #333;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cc-table td {
+            padding: 10px 12px;
+            border: 1px solid #333;
+            color: #0f0;
+        }
+
+        .cc-table tr:nth-child(even) {
+            background: #111;
+        }
+
+        .cc-table tr:hover {
+            background: #1a2a1a;
+            cursor: pointer;
+        }
+
+        .cc-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background: #0a0;
+            color: #000;
+        }
+
+        .status-inactive {
+            background: #a00;
+            color: #fff;
+        }
+
+        .status-processing {
+            background: #aa0;
+            color: #000;
+        }
+
+        .cc-file-size {
+            font-family: 'Space Mono', monospace;
+            color: #0ff;
+        }
+
+        .cc-timestamp {
+            font-family: 'Space Mono', monospace;
+            color: #f0f;
+            font-size: 12px;
+        }
+
+        .cc-progress {
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .cc-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #0f0, #0ff);
+            transition: width 0.3s ease;
+        }
+
+        .cc-stats {
+            margin-top: 30px;
+            padding: 20px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+
+        .cc-stats h3 {
+            color: #0f0;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .cc-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .cc-stat-item {
+            padding: 10px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            border-left: 4px solid #0f0;
+        }
+
+        .cc-stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0ff;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .cc-stat-label {
+            font-size: 12px;
+            color: #0f0;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cc-update-time {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: #0f0;
+            opacity: 0.6;
+        }
+        
+        /* === NOUVEAUX STYLES POUR LE TERMINAL COMMANDE CRAWL === */
+        .cc-index-terminal-content {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Courier New', 'MS DOS', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Le div terminal interne gérera le défilement */
+        }
+        
+        .cc-index-terminal-content #terminal {
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .cc-index-terminal-content #terminal::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .cc-index-terminal-content #terminal::-webkit-scrollbar-track {
+            background: #000000;
+        }
+        
+        .cc-index-terminal-content #terminal::-webkit-scrollbar-thumb {
+            background: #444444;
+        }
+        
+        .cc-index-terminal-content .line {
+            margin: 0;
+        }
+        /* === FIN DES NOUVEAUX STYLES === */
+        
     </style>
 </head>
 <body>
@@ -557,11 +848,8 @@
             <h2>PORTFOLIO STUDIO</h2>
         </div>
         <div class="boot-info">
-            <div>> Initializing portfolio system...</div>
-            <div>> Loading visual components...</div>
-            <div>> Ready for interaction</div>
         </div>
-        <div class="click-prompt">↓ Click to enter ↓</div>
+        <div class="click-prompt"> Click to enter </div>
     </div>
 
     <div id="desktop" class="hidden">
@@ -595,6 +883,21 @@
             { title: 'Track 03', url: 'https://www.youtube.com/watch?v=ZYdd73SOxhY&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=3' },
             { title: 'Track 04', url: 'https://www.youtube.com/watch?v=nMb5nyoi364&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=4' },
             { title: 'Track 05', url: 'https://www.youtube.com/watch?v=r3K5uKMca2g&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=5' },
+            { title: 'Track 06', url: 'https://www.youtube.com/watch?v=-gU_jhD4-gU&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=6' },
+            { title: 'Track 07', url: 'https://www.youtube.com/watch?v=zXWdIwlsX0k&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=7' },
+            { title: 'Track 08', url: 'https://www.youtube.com/watch?v=hkalzgipJ4k&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=8' },
+            { title: 'Track 09', url: 'https://www.youtube.com/watch?v=hAUSlgrkFW4&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=9' },
+            { title: 'Track 10', url: 'https://www.youtube.com/watch?v=7WPIITeW2oI&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=10' },
+            { title: 'Track 11', url: 'https://www.youtube.com/watch?v=aTke5TuNzpk&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=11' },
+            { title: 'Track 12', url: 'https://www.youtube.com/watch?v=YIB_i8QziJc&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=12' },
+            { title: 'Track 13', url: 'https://www.youtube.com/watch?v=So05yb9a_KU&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=13' },
+            { title: 'Track 14', url: 'https://www.youtube.com/watch?v=c-L4xUWnkAk&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=14' },
+            { title: 'Track 15', url: 'https://www.youtube.com/watch?v=mLSMTDLa7rw&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=15' },
+            { title: 'Track 16', url: 'https://www.youtube.com/watch?v=2yyUvvjWHgg&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=16' },
+            { title: 'Track 17', url: 'https://www.youtube.com/watch?v=TbP3LAuTTCY&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=17' },
+            { title: 'Track 18', url: 'https://www.youtube.com/watch?v=j4w_mQdwfaE&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=18' },
+            { title: 'Track 19', url: 'https://www.youtube.com/watch?v=MDgC7BI5W8g&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=19' },
+            { title: 'Track 20', url: 'https://www.youtube.com/watch?v=PcJOlkNMXW8&list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug&index=20' }
         ];
 
         const applications = [
@@ -602,14 +905,31 @@
                 id: 'installations',
                 title: 'Compétences',
                 icon: 'icon-installations',
+                windowSize: { width: 700, height: 500 },
                 content: `
                     <div class="inventory-grid">
-                        <div class="inventory-item" style="text-align: center; padding: 30px;">
+                        <div class="inventory-item">
                             <div class="item-info">
-                                <h4>Système Prêt</h4>
-                                <div class="item-type">Compétences en Chargement</div>
-                                <div class="item-desc">Vos compétences et technologies maîtrisées seront affichées ici.</div>
-                                <div class="item-stats"><strong>Statut:</strong> Prêt pour les données</div>
+                                <h4>Développement Web</h4>
+                                <div class="item-type">Frontend & Backend</div>
+                                <div class="item-desc">Expert en JavaScript, React, Vue.js, Node.js et développement full-stack. Création d'interfaces utilisateur innovantes et d'expériences digitales immersives.</div>
+                                <div class="item-stats"><strong>Technologies:</strong> JavaScript, TypeScript, React, Vue.js, Node.js, Three.js, WebGL</div>
+                            </div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="item-info">
+                                <h4>Design & UX/UI</h4>
+                                <div class="item-type">Design System & Interfaces</div>
+                                <div class="item-desc">Conception de systèmes de design cohérents et d'interfaces utilisateur intuitives. Approche centrée sur l'expérience utilisateur et l'esthétique moderne.</div>
+                                <div class="item-stats"><strong>Outils:</strong> Figma, Adobe Creative Suite, Design Systems</div>
+                            </div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="item-info">
+                                <h4>Art Numérique & Installations</h4>
+                                <div class="item-type">Création Interactive</div>
+                                <div class="item-desc">Développement d'installations interactives, visualisations de données et expériences immersives combinant code créatif et design.</div>
+                                <div class="item-stats"><strong>Domaines:</strong> Data Visualization, Art Générative, Installations Interactives</div>
                             </div>
                         </div>
                     </div>
@@ -619,24 +939,25 @@
                 id: 'projets',
                 title: 'Projets',
                 icon: 'icon-projets',
+                windowSize: { width: 700, height: 500 },
                 content: `
                     <div class="inventory-grid">
                         <div class="inventory-item">
                             <div class="item-info">
                                 <h4>Sous le Flux</h4>
-                                <div class="item-type">Video Mapping - Data Visualization</div>
-                                <div class="item-desc">Installation immersive représentant les flux de données mondiaux en temps réel.</div>
-                                <div class="item-stats"><strong>Tech:</strong> Three.js, WebGL</div>
+                                <div class="item-type">Installation - Data Visualization</div>
+                                <div class="item-desc">On oublie souvent que près de 80 % du trafic Internet mondial transite par des câbles sous-marins. Ce que l'on imagine léger, virtuel, diffusé dans les airs, circule en réalité dans les profondeurs. Grâce à des données en temps réel fournies par l'entreprise Data Flow, je cartographie ce trafic sur un site web que j'ai créé. Des points lumineux y représentent les flux souterrains. L'installation est ensuite projetée au sol, obligeant le spectateur à baisser la tête pour observer le réseau, renforçant ainsi l'idée d'un monde numérique enfoui.</div>
+                                <div class="item-stats"><strong>Tech:</strong> Three.js, WebGL, Data Visualization</div>
                                 <button class="retro-link launch-project-btn" data-project="sous-le-flux" style="margin-top: 10px;">Voir le projet</button>
                             </div>
                         </div>
                         <div class="inventory-item">
                             <div class="item-info">
-                                <h4>Lecture Terminal</h4>
+                                <h4>Commande Crawl</h4>
                                 <div class="item-type">Installation Interactive</div>
-                                <div class="item-desc">Visualisation interactive de l'archive Common Crawl à travers un terminal.</div>
-                                <div class="item-stats"><strong>Tech:</strong> HTML5, JavaScript</div>
-                                <button class="retro-link launch-project-btn" data-project="lecture-terminal" style="margin-top: 10px;">Voir le projet</button>
+                                <div class="item-desc">Dans ce projet, je récupère un fichier produit par une entreprise qui met en ligne des bots chargés d'archiver tout le texte publié sur Internet par des humains. Ces données, compilées, représentent environ 400 téraoctets et forment une capture du Web à un instant T. J'ai créé un programme qui lit ce fichier et en affiche la lecture en direct sur un écran. L'installation rend visible cette lecture du Web, comme une photographie de l'humanité à un moment donné.</div>
+                                <div class="item-stats"><strong>Tech:</strong> HTML5, JavaScript, Common Crawl</div>
+                                <button class="retro-link launch-project-btn" data-project="commande-crawl" style="margin-top: 10px;">Voir le projet</button>
                             </div>
                         </div>
                     </div>
@@ -646,38 +967,56 @@
                 id: 'musique',
                 title: 'Musique',
                 icon: 'icon-musique',
+                /* === CONTENU ET TAILLE MODIFIÉS === */
+                windowSize: { width: 600, height: 500 },
                 content: `
-                    <div class="inventory-grid">
-                        <div class="inventory-item">
-                            <div class="item-info">
-                                <h4>Sonorités Calmes</h4>
-                                <div class="item-type">Jazz Numérique & Ambient Électronique</div>
-                                <div class="item-desc">Exploration des sonorités douces mêlant influences jazz et esthétiques numériques.</div>
-                                <div class="item-stats"><strong>Distribution:</strong> Spotify, Apple Music, YouTube</div>
-                                <button class="retro-link launch-project-btn" data-project="musique" style="margin-top: 10px;">Lecteur Audio</button>
-                            </div>
+                    <div class="inventory-item" style="margin-bottom: 16px;">
+                        <div class="item-info">
+                            <h4>Sonorités Calmes</h4>
+                            <div class="item-type">Jazz Numérique & Ambient & Lo-fi</div>
+                            <div class="item-desc">Je développe depuis plusieurs années une pratique musicale assistée par logiciel. Mes compositions explorent des sonorités douces, calmes, proches du jazz et du lo-fi. La musique me permet de construire des ambiances en accord avec ma personnalité et d'exprimer une autre facette de mon univers artistique, plus intime et atmosphérique.</div>
                         </div>
                     </div>
+
+                    <div style="margin-bottom: 16px; text-align: center;">
+                        <div style="font-size: 0.8rem; color: var(--accent-purple); margin-bottom: 8px;">Écouter sur d'autres plateformes</div>
+                        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
+                            <a class="retro-link" href="https://music.apple.com/fr/album/lf/1833155912" target="_blank">Apple Music</a>
+                            <a class="retro-link" href="https://open.spotify.com/intl-fr/artist/0oxQsg9xEMZMl3iZHiZlBq" target="_blank">Spotify</a>
+                            <a class="retro-link" href="https://www.qobuz.com/ca-fr/album/lf-arthur-cieux/luph0y3jjm1qb" target="_blank">Qobuz</a>
+                            <a class="retro-link" href="https://music.amazon.in/artists/B0DXQ4C37T/arthur-cieux" target="_blank">Amazon Music</a>
+                            <a class="retro-link" href="https://www.youtube.com/channel/UCH17Gl2MRr9D3kB54iBPtvg" target="_blank">Chaîne YouTube</a>
+                            <a class="retro-link" href="https://www.youtube.com/playlist?list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug" target="_blank">Playlist Complète</a>
+                        </div>
+                    </div>
+                    
+                    <div class="track-info" id="current-track">
+                        Sélectionnez une piste pour l'ouvrir sur YouTube
+                    </div>
+                    
+                    <div class="track-list">
+                        ${musicTracks.map((track, index) => `
+                            <div class="track-item" data-url="${track.url}" data-title="${track.title}">
+                                ${track.title}
+                            </div>
+                        `).join('')}
+                    </div>
                 `
+                /* === FIN DES MODIFICATIONS MUSIQUE === */
             },
             {
                 id: 'about',
                 title: 'À Propos',
                 icon: 'icon-about',
+                windowSize: { width: 700, height: 500 },
                 content: `
                     <div class="inventory-grid">
                         <div class="inventory-item">
                             <div class="item-info">
-                                <h4>Développeur Full Stack</h4>
-                                <div class="item-type">Designer & Créatif</div>
-                                <div class="item-desc">Passionné par la création d'expériences digitales innovantes, combinant expertise technique et sens du design.</div>
+                                <h4>Arthur Cieux</h4>
+                                <div class="item-type">Artiste & Développeur</div>
+                                <div class="item-desc">Mon travail explore des notions telles que le numérique, l'archivage et le quotidien. J'utilise différents médiums — installation, son, image, web — pour rendre compte du monde contemporain et des perceptions de la vie ordinaire. Chaque projet cherche à transmettre une ambiance, une sensation, comme une expérience à part entière. Mes supports varient selon le propos : chaque format naît du sens qu'il porte, afin de traduire au mieux les idées que j'explore.</div>
                                 <div class="item-stats" style="margin-top: 12px;">
-                                    <strong>Expertise:</strong><br>
-                                    • JavaScript / TypeScript<br>
-                                    • React & Vue.js<br>
-                                    • Three.js & WebGL<br>
-                                    • Design System & UI/UX
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -687,6 +1026,7 @@
                 id: 'parametres',
                 title: 'Paramètres',
                 icon: 'icon-parametres',
+                windowSize: { width: 700, height: 500 },
                 content: `
                     <div class="settings-grid">
                         <div class="setting-item">
@@ -753,6 +1093,13 @@
             windowElement.className = 'content-window';
             windowElement.id = `window-${app.id}`;
             windowElement.style.zIndex = ++zIndexCounter;
+            
+            // Utiliser la taille définie dans l'application
+            const width = app.windowSize?.width || 650;
+            const height = app.windowSize?.height || 450;
+            
+            windowElement.style.width = `${width}px`;
+            windowElement.style.height = `${height}px`;
             windowElement.style.left = `${100 + Math.random() * 300}px`;
             windowElement.style.top = `${50 + Math.random() * 200}px`;
             
@@ -773,6 +1120,29 @@
             openWindows[app.id] = windowElement;
             addToTaskbar(app);
             setupWindowEvents(windowElement, app);
+
+            /* === LOGIQUE AJOUTÉE POUR LE LECTEUR DE MUSIQUE === */
+            if (app.id === 'musique') {
+                const trackItems = windowElement.querySelectorAll('.track-item');
+                const currentTrack = windowElement.querySelector('#current-track');
+                
+                trackItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        // Retirer la classe active de tous les éléments
+                        trackItems.forEach(track => track.classList.remove('active'));
+                        // Ajouter la classe active à l'élément cliqué
+                        item.classList.add('active');
+                        
+                        const url = item.dataset.url;
+                        const title = item.dataset.title;
+                        currentTrack.textContent = `🎵 En écoute: ${title}`;
+                        
+                        // Ouvrir dans un nouvel onglet
+                        window.open(url, '_blank');
+                    });
+                });
+            }
+            /* === FIN DE LA LOGIQUE AJOUTÉE === */
         }
 
         function setupWindowEvents(windowElement, app) {
@@ -854,15 +1224,12 @@
             });
         }
 
+        // Fonction pour lancer Sous le Flux
         function launchSousLeFlux() {
             const projectWindow = document.createElement('div');
-            projectWindow.className = 'content-window';
+            projectWindow.className = 'content-window project-window';
             projectWindow.id = 'window-sous-le-flux';
             projectWindow.style.zIndex = ++zIndexCounter;
-            projectWindow.style.width = '98%';
-            projectWindow.style.height = '95%';
-            projectWindow.style.left = '1%';
-            projectWindow.style.top = '1%';
             
             projectWindow.innerHTML = `
                 <div class="window-header">
@@ -872,8 +1239,8 @@
                     </div>
                 </div>
                 <div class="window-content" style="padding: 0; overflow: hidden;">
-                    <div id="sous-le-flux-container" style="width: 100%; height: 100%; position: relative; background: var(--primary-dark);">
-                        <canvas id="sous-le-flux-canvas" style="display: block; width: 100%; height: 100%;"></canvas>
+                    <div class="sous-le-flux-container">
+                        <canvas class="sous-le-flux-canvas"></canvas>
                     </div>
                 </div>
             `;
@@ -891,20 +1258,29 @@
             setTimeout(() => initSousLeFlux(), 100);
         }
 
+        // Intégration du code Sous le Flux
         function initSousLeFlux() {
-            const container = document.getElementById('sous-le-flux-container');
-            const canvas = document.getElementById('sous-le-flux-canvas');
+            const container = document.querySelector('.sous-le-flux-container');
+            const canvas = document.querySelector('.sous-le-flux-canvas');
             if (!container || !canvas) return;
             
+            // Scene setup
             const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(0, 30, 0);
+            scene.background = new THREE.Color(0x000000);
+            
+            const camera = new THREE.PerspectiveCamera(
+                60,
+                container.clientWidth / container.clientHeight,
+                0.1,
+                1000
+            );
+            camera.position.set(0, 35, 0);
             camera.lookAt(0, 0, 0);
-            
-            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setClearColor(0x1a1a1a);
-            
+
+            // Continental outlines
             const continents = [
                 [[-20, 12], [-18, 14], [-16, 15], [-14, 14], [-12, 12], [-14, 10], [-16, 8], [-18, 6], [-20, 8], [-22, 10]],
                 [[-16, -2], [-14, 0], [-12, -2], [-14, -6], [-16, -10], [-18, -8], [-18, -4]],
@@ -913,54 +1289,78 @@
                 [[6, 16], [10, 18], [14, 18], [18, 16], [20, 14], [18, 12], [16, 10], [14, 8], [12, 10], [10, 12], [8, 14]],
                 [[16, -6], [18, -4], [20, -6], [18, -8], [16, -8]]
             ];
-            
+
             continents.forEach(continent => {
                 const points = continent.map(([x, z]) => new THREE.Vector3(x, 0.01, z));
                 points.push(points[0]);
-                const geom = new THREE.BufferGeometry().setFromPoints(points);
-                const mat = new THREE.LineBasicMaterial({ color: 0xff006e, transparent: true, opacity: 0.4 });
-                scene.add(new THREE.Line(geom, mat));
+                
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+                const lineMaterial = new THREE.LineBasicMaterial({
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.3
+                });
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                scene.add(line);
             });
-            
+
+            // Nodes
             const nodes = [
                 { x: -18, z: 12 }, { x: -22, z: 8 }, { x: -14, z: 10 }, { x: -16, z: -6 },
                 { x: 0, z: 14 }, { x: 2, z: 13 }, { x: 4, z: 12 }, { x: 2, z: -2 },
                 { x: 4, z: 2 }, { x: 10, z: 16 }, { x: 14, z: 10 }, { x: 16, z: 14 },
                 { x: 18, z: 12 }, { x: 12, z: 12 }, { x: 18, z: -6 }
             ];
-            
-            const nodeGeom = new THREE.CircleGeometry(0.3, 16);
-            const nodeMat = new THREE.MeshBasicMaterial({ color: 0x06ffa5, transparent: true, opacity: 1 });
-            nodes.forEach(n => {
-                const mesh = new THREE.Mesh(nodeGeom, nodeMat.clone());
-                mesh.position.set(n.x, 0.02, n.z);
-                mesh.rotation.x = -Math.PI / 2;
-                scene.add(mesh);
+
+            const nodeGeometry = new THREE.CircleGeometry(0.2, 16);
+            const nodeMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.8
             });
-            
+
+            nodes.forEach(nodeData => {
+                const node = new THREE.Mesh(nodeGeometry, nodeMaterial.clone());
+                node.position.set(nodeData.x, 0.02, nodeData.z);
+                node.rotation.x = -Math.PI / 2;
+                scene.add(node);
+            });
+
+            // Connections
             const connections = [
                 [0, 1], [0, 2], [1, 2], [0, 4], [1, 11], [4, 5], [5, 6], [4, 6],
                 [0, 3], [3, 7], [6, 9], [9, 10], [10, 11], [11, 12], [12, 13],
                 [13, 14], [11, 14], [4, 7], [6, 8], [10, 12]
             ];
-            
+
             connections.forEach(([i, j]) => {
-                const geom = new THREE.BufferGeometry().setFromPoints([
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints([
                     new THREE.Vector3(nodes[i].x, 0.01, nodes[i].z),
                     new THREE.Vector3(nodes[j].x, 0.01, nodes[j].z)
                 ]);
-                const mat = new THREE.LineBasicMaterial({ color: 0x3a86ff, transparent: true, opacity: 0.3 });
-                scene.add(new THREE.Line(geom, mat));
+                const lineMaterial = new THREE.LineBasicMaterial({
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.15
+                });
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                scene.add(line);
             });
-            
+
+            // Data packets
             class DataPacket {
                 constructor() {
                     this.selectRoute();
-                    const geom = new THREE.SphereGeometry(0.08, 8, 8);
-                    const mat = new THREE.MeshBasicMaterial({ color: 0xff006e, transparent: true, opacity: 1 });
-                    this.mesh = new THREE.Mesh(geom, mat);
+                    const geometry = new THREE.SphereGeometry(0.06, 8, 8);
+                    const material = new THREE.MeshBasicMaterial({
+                        color: 0xffffff,
+                        transparent: true,
+                        opacity: 1
+                    });
+                    this.mesh = new THREE.Mesh(geometry, material);
                     scene.add(this.mesh);
                 }
+
                 selectRoute() {
                     const [startIdx, endIdx] = connections[Math.floor(Math.random() * connections.length)];
                     this.start = new THREE.Vector3(nodes[startIdx].x, 0.1, nodes[startIdx].z);
@@ -968,147 +1368,211 @@
                     this.progress = 0;
                     this.speed = 0.004 + Math.random() * 0.006;
                 }
+
                 update() {
                     this.progress += this.speed;
                     if (this.progress >= 1) this.selectRoute();
+
                     const t = this.progress;
-                    const x = this.start.x + (this.end.x - this.start.x) * t;
-                    const z = this.start.z + (this.end.z - this.start.z) * t;
-                    this.mesh.position.set(x, 0.1, z);
+                    this.mesh.position.set(
+                        this.start.x + (this.end.x - this.start.x) * t,
+                        0.1,
+                        this.start.z + (this.end.z - this.start.z) * t
+                    );
                     this.mesh.material.opacity = Math.sin(t * Math.PI) * 0.9 + 0.1;
                 }
             }
-            
+
             const packets = [];
-            for (let i = 0; i < 200; i++) packets.push(new DataPacket());
-            
-            const animate = () => {
+            for (let i = 0; i < 300; i++) {
+                packets.push(new DataPacket());
+            }
+
+            // Animation loop
+            function animate() {
                 requestAnimationFrame(animate);
-                packets.forEach(p => p.update());
+                packets.forEach(packet => packet.update());
                 renderer.render(scene, camera);
-            };
-            
-            window.sousLeFluxScene = { renderer, scene, camera };
+            }
             animate();
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+
+            window.sousLeFluxScene = { scene, camera, renderer };
         }
 
-        function launchLectureTerminal() {
+        /* === FONCTION COMMANDE CRAWL MODIFIÉE === */
+        // Fonction pour lancer Commande Crawl - Version Terminal
+        function launchCommandeCrawl() {
             const projectWindow = document.createElement('div');
-            projectWindow.className = 'content-window';
-            projectWindow.id = 'window-lecture-terminal';
+            projectWindow.className = 'content-window project-window';
+            projectWindow.id = 'window-commande-crawl';
             projectWindow.style.zIndex = ++zIndexCounter;
-            projectWindow.style.width = '98%';
-            projectWindow.style.height = '95%';
-            projectWindow.style.left = '1%';
-            projectWindow.style.top = '1%';
             
             projectWindow.innerHTML = `
                 <div class="window-header">
-                    <h3 class="window-title">Lecteur Terminal</h3>
+                    <h3 class="window-title">Commande Crawl - Live Index Feed</h3>
                     <div class="window-controls">
                         <button class="window-btn close-btn">✕</button>
                     </div>
                 </div>
-                <div class="window-content" style="padding: 0; overflow: hidden;">
-                    <div id="terminal-display"></div>
+                <div class="window-content cc-index-terminal-content" style="padding: 0;">
+                    <div id="terminal"></div>
                 </div>
             `;
             
             windowsContainer.appendChild(projectWindow);
+
+            // --- Début du script embarqué de cc_index_table.html ---
+            const terminal = projectWindow.querySelector('#terminal'); // Limité à la nouvelle fenêtre
+            const fileContent = `cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=crawldiagnostics/part-00000-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=crawldiagnostics/part-00001-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=crawldiagnostics/part-00002-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=crawldiagnostics/part-00003-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=crawldiagnostics/part-00004-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=crawldiagnostics/part-00005-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=crawldiagnostics/part-00006-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=crawldiagnostics/part-00007-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=crawldiagnostics/part-00008-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=crawldiagnostics/part-00009-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=robotstxt/part-00000-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=robotstxt/part-00001-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=robotstxt/part-00002-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=robotstxt/part-00003-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=robotstxt/part-00004-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=warc/part-00000-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=warc/part-00001-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=warc/part-00002-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=warc/part-00003-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet
+cc-index/table/cc-main/warc/crawl=CC-MAIN-2025-08/subset=warc/part-00004-b184e832-acd1-425a-bab7-895830f2748a.c000.gz.parquet`;
+
+            const lines = fileContent.split('\n');
+            let currentLine = 0;
+            let lineCount = 0;
+            const maxLines = 1000;
+            let animationFrameId = null; // Pour contrôler la boucle
+
+            function addLine(text) {
+                if (!terminal) return; // Arrêter si le terminal n'existe plus
+                const lineDiv = document.createElement('div');
+                lineDiv.className = 'line';
+                lineDiv.textContent = text;
+                terminal.appendChild(lineDiv);
+                lineCount++;
+
+                // Garder seulement les 1000 dernières lignes
+                if (lineCount > maxLines) {
+                    terminal.removeChild(terminal.firstChild);
+                    lineCount--;
+                }
+
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+
+            function displayNextLine() {
+                // Arrêter si la fenêtre (et le terminal) n'existe plus dans le DOM
+                if (!document.body.contains(projectWindow)) {
+                    if (animationFrameId) {
+                        cancelAnimationFrame(animationFrameId);
+                    }
+                    return;
+                }
+                
+                addLine(lines[currentLine]);
+                currentLine++;
+                if (currentLine >= lines.length) {
+                    currentLine = 0; // Recommencer au début
+                }
+                animationFrameId = requestAnimationFrame(displayNextLine);
+            }
+
+            displayNextLine();
+            // --- Fin du script embarqué ---
             
             const closeBtn = projectWindow.querySelector('.close-btn');
             closeBtn.addEventListener('click', () => {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId); // Arrêter la boucle à la fermeture
+                }
                 projectWindow.remove();
             });
-            
-            initTerminal();
         }
-
-        function initTerminal() {
-            const lines = [
-                ">>> LECTURE DU FICHIER cc-index-table.paths ...",
-                "[OK] Connexion à l'archive Common Crawl",
-                "[INFO] Lecture en cours...",
-                "https://example.com/",
-                "https://news.example.org/article/1",
-                "https://cdn.images.net/data/2021/10/asset.png",
-                "https://video.example.com/watch?v=94kd",
-                "https://api.server.net/query?id=8237",
-                "https://example.com/contact",
-                "https://sub.domain.tld/path/file.html",
-                "[INFO] Lecture 10/10 terminée.",
-                "[FIN] Traitement terminé avec succès."
-            ];
-
-            const terminal = document.getElementById('terminal-display');
-            if (!terminal) return;
-
-            let index = 0;
-
-            function printLine() {
-                if (index >= lines.length) {
-                    setTimeout(() => {
-                        const fake = "https://" + Math.random().toString(36).slice(2, 8) + ".example.com/" + Math.random().toString(36).slice(2, 5);
-                        const line = document.createElement("div");
-                        line.className = "terminal-line";
-                        line.textContent = fake;
-                        terminal.appendChild(line);
-                        terminal.scrollTop = terminal.scrollHeight;
-                        if (terminal.children.length > 100) terminal.removeChild(terminal.firstChild);
-                        printLine();
-                    }, 120);
-                    return;
-                }
-
-                const line = document.createElement("div");
-                line.className = "terminal-line";
-                line.textContent = lines[index];
-                terminal.appendChild(line);
-                terminal.scrollTop = terminal.scrollHeight;
-                index++;
-
-                const delay = Math.random() * 200 + 100;
-                setTimeout(printLine, delay);
+        /* === FIN DE LA FONCTION MODIFIÉE === */
+        
+        function getStatusClass(status) {
+            switch(status) {
+                case 'active': return 'status-active';
+                case 'inactive': return 'status-inactive';
+                case 'processing': return 'status-processing';
+                default: return 'status-inactive';
             }
-
-            setTimeout(printLine, 600);
+        }
+        
+        function getStatusText(status) {
+            switch(status) {
+                case 'active': return 'ACTIF';
+                case 'inactive': return 'INACTIF';
+                case 'processing': return 'TRAITEMENT';
+                default: return 'INACTIF';
+            }
         }
 
+        /* === FONCTION LECTEUR MUSIQUE (conservée pour le bouton "Projets") === */
         function launchMusicPlayer() {
             const projectWindow = document.createElement('div');
-            projectWindow.className = 'content-window';
+            projectWindow.className = 'content-window music-player-window';
             projectWindow.id = 'window-music-player';
             projectWindow.style.zIndex = ++zIndexCounter;
-            projectWindow.style.width = '95%';
-            projectWindow.style.height = '90%';
-            projectWindow.style.left = '2.5%';
-            projectWindow.style.top = '2.5%';
-            
-            let tracksHtml = musicTracks.map((track, index) => 
-                `<div class="track-item" data-url="${track.url}" data-index="${index}">${track.title}</div>`
-            ).join('');
+            projectWindow.style.left = 'calc(50% - 300px)';
+            projectWindow.style.top = 'calc(50% - 250px)';
             
             projectWindow.innerHTML = `
                 <div class="window-header">
-                    <h3 class="window-title">Lecteur Audio - Sonorités Calmes</h3>
+                    <h3 class="window-title">Lecteur Audio - Ambiances</h3>
                     <div class="window-controls">
                         <button class="window-btn close-btn">✕</button>
                     </div>
                 </div>
-                <div class="window-content" style="padding: 20px; text-align: center;">
-                    <div class="music-visualizer" id="music-visualizer">
-                        ${Array.from({length: 20}, (_, i) => 
-                            `<div class="music-bar" style="animation-delay: ${i * 0.05}s;"></div>`
-                        ).join('')}
+                <div class="window-content">
+
+                    <div class="inventory-item" style="margin-bottom: 16px;">
+                        <div class="item-info">
+                            <h4>Sonorités Calmes</h4>
+                            <div class="item-type">Jazz Numérique & Ambient & Lo-fi</div>
+                            <div class="item-desc">Je développe depuis plusieurs années une pratique musicale assistée par logiciel. Mes compositions explorent des sonorités douces, calmes, proches du jazz et du lo-fi. La musique me permet de construire des ambiances en accord avec ma personnalité et d'exprimer une autre facette de mon univers artistique, plus intime et atmosphérique.</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 16px; text-align: center;">
+                        <div style="font-size: 0.8rem; color: var(--accent-purple); margin-bottom: 8px;">Écouter sur d'autres plateformes</div>
+                        <select class="retro-link" onchange="if(this.value) window.open(this.value, '_blank')" style="width: 220px; padding: 6px; cursor: pointer;">
+                            <option value="">-- Choisir une plateforme --</option>
+                            <option value="https://music.apple.com/fr/album/lf/1833155912">Apple Music</option>
+                            <option value="https://open.spotify.com/intl-fr/artist/0oxQsg9xEMZMl3iZHiZlBq">Spotify</option>
+                            <option value="https://www.qobuz.com/ca-fr/album/lf-arthur-cieux/luph0y3jjm1qb">Qobuz</option>
+                            <option value="https://music.amazon.in/artists/B0DXQ4C37T/arthur-cieux">Amazon Music</option>
+                            <option value="https://www.youtube.com/channel/UCH17Gl2MRr9D3kB54iBPtvg">Chaîne YouTube</option>
+                            <option value="https://www.youtube.com/playlist?list=OLAK5uy_nFVv1i6LnwkXk1_9JnQs3GYr2rxDg87ug">Playlist Complète (YouTube)</option>
+                        </select>
                     </div>
                     
-                    <div style="margin: 20px 0; font-size: 0.8rem; color: var(--primary-dark);">
-                        <strong>20 compositions disponibles</strong>
+                    <div class="track-info" id="current-track">
+                        Sélectionnez une piste pour l'ouvrir sur YouTube
                     </div>
                     
                     <div class="track-list">
-                        ${tracksHtml}
+                        ${musicTracks.map((track, index) => `
+                            <div class="track-item" data-url="${track.url}" data-title="${track.title}">
+                                ${track.title}
+                            </div>
+                        `).join('')}
                     </div>
+                    
                 </div>
             `;
             
@@ -1120,26 +1584,53 @@
             });
             
             const trackItems = projectWindow.querySelectorAll('.track-item');
+            const currentTrack = projectWindow.querySelector('#current-track');
+            
             trackItems.forEach(item => {
                 item.addEventListener('click', () => {
-                    const url = item.getAttribute('data-url');
+                    // Retirer la classe active de tous les éléments
+                    trackItems.forEach(track => track.classList.remove('active'));
+                    // Ajouter la classe active à l'élément cliqué
+                    item.classList.add('active');
+                    
+                    const url = item.dataset.url;
+                    const title = item.dataset.title;
+                    currentTrack.textContent = `🎵 En écoute: ${title}`;
+                    
+                    // Ouvrir dans un nouvel onglet
                     window.open(url, '_blank');
                 });
             });
         }
 
+        // Gestionnaire d'événements pour les boutons de projet
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('launch-project-btn')) {
-                e.preventDefault();
                 const project = e.target.dataset.project;
-                if (project === 'sous-le-flux') {
-                    launchSousLeFlux();
-                } else if (project === 'lecture-terminal') {
-                    launchLectureTerminal();
-                } else if (project === 'musique') {
-                    launchMusicPlayer();
+                switch(project) {
+                    case 'sous-le-flux':
+                        launchSousLeFlux();
+                        break;
+                    case 'commande-crawl':
+                        launchCommandeCrawl();
+                        break;
+                    case 'musique':
+                        launchMusicPlayer();
+                        break;
                 }
             }
+        });
+
+        // Initialisation des infos de boot
+        document.addEventListener('DOMContentLoaded', () => {
+            const bootInfo = document.querySelector('.boot-info');
+
+            
+            infoLines.forEach((line, index) => {
+                const div = document.createElement('div');
+                div.textContent = line;
+                bootInfo.appendChild(div);
+            });
         });
     </script>
 </body>
